@@ -42,6 +42,8 @@ The **movie list view** should:
 
 # Tips
 
+**Don't spend time making this pretty.** Though we typically use the Bootstrap CSS framework and strive for modern, clean UI designs, we would much prefer that you spend your limited time understanding and wrestling with Backbone instead of prettying things up with CSS. Naked, unstyled input text boxes and checkboxes are perfect for this assignment.
+
 Spend time skimming, reading & internalizing the Backbone [docs](http://backbonejs.org/) and [annotated code](http://backbonejs.org/docs/backbone.html). Examples, tutorials and StackOverflow can be helpful, but nothing beats the docs and the code when you're trying to gain a thorough, authoritative understanding of a library.
 
 You may run into an issue where a movie is not firing a change event or re-rendering or updating or saving when you add or remove a genre. This is because `movie.genre_fks` is an array -- since the Backbone Model just holds a reference to this array, it only knows if the array reference changes; it has no way of knowing if the contents of the array change. There are a number of ways to handle this, but the simplest is to just replace the whole array with a new one whenever you make changes, via cloning the old one, making any necessary changes and assigning it back, like this:
