@@ -8,8 +8,10 @@ This assignment shouldn't require hundreds of lines of code. The important thing
 
 # Setup Instructions
 
-* Download & install node 32-bit, if you haven't already (64-bit is ok, but we recommend 32-bit because it has fewer prerequisites for building native addon modules)
-* Download & install postgres (there should be a link to EnterpriseDB site for installer that includes pgAdmin tool)
+*Note: The below instructions assume Windows, but everything should work equally well on OS X or Linux, since these are all cross-platform technologies.*
+
+* [Download](http://nodejs.org/download/) & install node 32-bit, if you haven't already (64-bit is ok, but we recommend 32-bit because it has fewer prerequisites for building native addon modules on Windows)
+* [Download](http://www.enterprisedb.com/products-services-training/pgdownload) & install postgres (the official installers are from enterprisedb.com b/c they include the pgAdmin tool)
 * Create a new "movies" database using pgAdmin
 * Set the `DATABASE_URL` environment variable, including the password you used when setting up postgres:
   `C:\movie-app\> set DATABASE_URL = postgres://postgres:{{password}}@localhost/movies`
