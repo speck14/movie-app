@@ -50,5 +50,5 @@ You may run into an issue where a movie is not firing a change event or re-rende
 var genre_fks = movie.get('genre_fks');
 genre_fks = genre_fks.slice(); // .slice() is an idiomatic way to clone an array in JS
 // add or remove items from the array here
-movie.set(genre_fks);
+movie.set('genre_fks', genre_fks);
 ```
