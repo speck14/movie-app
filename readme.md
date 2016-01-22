@@ -12,9 +12,6 @@ This assignment shouldn't require hundreds of lines of code. The important thing
 
 * [Download](http://nodejs.org/download/) & install node 32-bit, if you haven't already (64-bit is ok, but we recommend 32-bit because it has fewer prerequisites for building native addon modules on Windows)
 * [Download](http://www.enterprisedb.com/products-services-training/pgdownload) & install postgres (the official installers are from enterprisedb.com b/c they include the pgAdmin tool)
-* Create a new "movies" database using pgAdmin
-* Set the `DATABASE_URL` environment variable, including the password you used when setting up postgres:
-  `C:\movie-app\> set DATABASE_URL = postgres://postgres:{{password}}@localhost/movies`
 * `git clone https://github.com/CSNW/movie-app.git`
 * `npm install` (this will pull down all dependencies)
 
@@ -24,7 +21,7 @@ In order to verify that everything was installed properly & is in working order,
 
 # Assignment
 
-Included in this project is a simple movie server that uses a Postgres database to store lists of movies and associated genres.
+Included in this project is a simple movie server that uses a sqlite database to store lists of movies and associated genres.
 
 Your assignment is to write a **movie list view** and a **movie item view**. The movie list view will contain a set of movie item views. You will want to read the Backbone docs and examples to learn how to do this in the most idiomatic way possible for Backbone and -- while you're doing it -- gain as much understanding of Backbone models, collections and views as possible.
 
