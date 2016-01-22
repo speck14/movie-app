@@ -92,7 +92,7 @@ function setupDatabase(callback) {
     db.all("SELECT name FROM sqlite_master WHERE type='table'", function(err, rows) {
       if (err) throw err;
       var tablenames = _.pluck(rows, 'name');
-      console.log('tablenames:', tablenames);
+
       // if the database schema is already setup; short-circuit
       if (_.contains(tablenames, 'movie') && _.contains(tablenames, 'genre'))
         return callback();
