@@ -16,7 +16,7 @@ This assignment shouldn't require hundreds of lines of code. The important thing
 
 # Run the Tests
 
-In order to verify that everything was installed properly & is in working order, you should run the tests. The server tests can be run in node by typing `C:\movie-app\> npm test` from the root folder. The backbone model tests can be run in the browser by first firing up the server (`C:\movie-app\> node server.js`) and then navigating to `http://localhost:3000/tests.js` in a modern browser.
+In order to verify that everything was installed properly & is in working order, you should run the tests. The server tests can be run in node by typing `C:\movie-app\> npm test` from the root folder. The backbone model tests can be run in the browser by first firing up the server (`C:\movie-app\> node server.js`) and then navigating to `http://localhost:3000/tests.html` in a modern browser.
 
 # Assignment
 
