@@ -1,4 +1,4 @@
-require('./server.js');
+var app = require('./server.js');
 var request = require('request');
 var expect = require('chai').expect;
 var _ = require('underscore');
@@ -28,6 +28,10 @@ describe('server', function() {
         done();
       });
     }, 1000);
+  });
+
+  after(function() {
+    app.server.close();
   });
 
   it('should list the 6 genres', function(done) {

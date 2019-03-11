@@ -3,9 +3,10 @@ var express = require('express');
 var uuid = require('uuid');
 var assert = require('assert');
 var _ = require('underscore');
+var bodyParser = require('body-parser');
 
 var app = express();
-app.use(express.bodyParser());
+app.use(bodyParser.json());
 
 var db;
 setupDatabase(function() {
@@ -80,7 +81,7 @@ setupDatabase(function() {
 
   app.use(express.static(__dirname + '/public'));
 
-  app.listen(3000);
+  app.server = app.listen(3000);
 });
 
 
@@ -127,3 +128,5 @@ function setupDatabase(callback) {
 function createUUID() {
   return uuid.v4().replace(/-/g, '');
 }
+
+module.exports = app;
