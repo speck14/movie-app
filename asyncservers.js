@@ -90,7 +90,7 @@ function setupDatabase() {
     if (err)
       throw err;
 
-    db.all("SELECT name FROM sqlite_master WHERE type='table'", function(err, rows) {
+   db.all("SELECT name FROM sqlite_master WHERE type='table'", function(err, rows) {
       if (err) throw err;
       var tablenames = _.pluck(rows, 'name');
 
@@ -98,18 +98,32 @@ function setupDatabase() {
       if (_.contains(tablenames, 'movie') && _.contains(tablenames, 'genre'))
         return requestHandlers();
 
-      var sql = ['CREATE TABLE movie (pk varchar(32) PRIMARY KEY, name varchar(255), genre_fks varchar(255))', 'CREATE TABLE genre (pk varchar(32) PRIMARY KEY, name varchar(100))'];
-      async.forEach(sql, db.run, function(err) {
-        if(err) console.log("There's been an error")
-        else console.log("your tables have been created successfully")
+      // Note: both the table creation & population below are DRY violations that a code review would catch
+      //   Normally we would write these as a callback loop via async.forEach() or generators
+      //   but for the sake of simplicity, I'm leaving them as nested callbacks
+    function runDB(sql, arr) {
+        db.run(sql, arr, function(err) {
+            if(err) throw err;
+        })
+    }
+    var tables = [['movie', 'varchar(255)'], ['genre', 'varchar(100)']]
+    var createTableSql = 'CREATE TABLE $1 (pk varchar(32) PRIMARY KEY, name $2, genre_fks varchar(255))'
+      // else create the 2 tables we need
+      runDB(createTableSql, tables);
+            // & populate the genres table
+      var genres = ['Action & Adventure', 'Kids & Family', 'Sci-Fi & Fantasy']
+      var insertSql = 'INSERT INTO genre (pk, name) VALUES ($1, $2)'
+      genres.foreach(genre => {
+        var vals = [createUUID(), genre]
+        runDB(insertSql, vals);
       })
-    })
-  })
+    requestHandlers();
+    });
+  });
 }
 
 function createUUID() {
   return uuid.v4().replace(/-/g, '');
 }
-
 setupDatabase();
 module.exports = app;
