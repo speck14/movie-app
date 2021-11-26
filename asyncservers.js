@@ -85,8 +85,7 @@ function requestHandlers () {
   app.server = app.listen(3000);
 };
 
-
-let setupDatabase = new Promise (function () {
+function setupDatabase() {
   db = new sqlite3.Database('movies.sqlite', function(err) {
     if (err)
       throw err;
@@ -97,40 +96,20 @@ let setupDatabase = new Promise (function () {
 
       // if the database schema is already setup; short-circuit
       if (_.contains(tablenames, 'movie') && _.contains(tablenames, 'genre'))
-        return requestHandlers()
+        return requestHandlers();
 
-        db.run('CREATE TABLE movie (pk varchar(32) PRIMARY KEY, name varchar(255), genre_fks varchar(255))', function(err) {
-          if (err) throw err;
-          db.run('CREATE TABLE genre (pk varchar(32) PRIMARY KEY, name varchar(100))', function(err) {
-            if (err) throw err;
-        
-            // & populate the genres table
-            db.run('INSERT INTO genre (pk, name) VALUES ($1, $2)', [createUUID(), 'Action & Adventure'], function(err) {
-              if (err) throw err;
-              db.run('INSERT INTO genre (pk, name) VALUES ($1, $2)', [createUUID(), 'Kids & Family'], function(err) {
-                if (err) throw err;
-                db.run('INSERT INTO genre (pk, name) VALUES ($1, $2)', [createUUID(), 'Sci-Fi & Fantasy'], function(err) {
-                  if (err) throw err;
-                  requestHandlers();
-                });
-              });
-            });
-          });
-        })
-
-      // Note: both the table creation & population below are DRY violations that a code review would catch
-      //   Normally we would write these as a callback loop via async.forEach() or generators
-      //   but for the sake of simplicity, I'm leaving them as nested callbacks
-
-      // else create the 2 tables we need
-
-    });
-  });
-})
+      var sql = ['CREATE TABLE movie (pk varchar(32) PRIMARY KEY, name varchar(255), genre_fks varchar(255))', 'CREATE TABLE genre (pk varchar(32) PRIMARY KEY, name varchar(100))'];
+      async.forEach(sql, db.run, function(err) {
+        if(err) console.log("There's been an error")
+        else console.log("your tables have been created successfully")
+      })
+    })
+  })
+}
 
 function createUUID() {
   return uuid.v4().replace(/-/g, '');
 }
 
-setupDatabase;
+setupDatabase();
 module.exports = app;
