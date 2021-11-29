@@ -1,4 +1,4 @@
-var app = require('./asyncservers');
+var app = require('./server');
 var request = require('request');
 var expect = require('chai').expect;
 var _ = require('underscore');
