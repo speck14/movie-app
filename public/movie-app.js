@@ -1,13 +1,6 @@
-var Movie = Backbone.Model.extend({
-  'urlRoot': '/movies',
-  'idAttribute': 'pk'
-});
+var element = React.createElement('h2', {}, 'Hello from React');
 
-var Movies = Backbone.Collection.extend({
-  'url': '/movies',
-  'model': Movie
-});
-
-$(document).ready(function() {
-  // Backbone App setup here
-});
+ReactDOM.render(
+  element, 
+  document.getElementById('root')
+);
