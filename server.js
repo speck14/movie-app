@@ -1,6 +1,7 @@
 var sqlite3 = require('sqlite3');
 var express = require('express');
 var uuid = require('uuid');
+var async = require('async')
 var assert = require('assert');
 var _ = require('underscore');
 var bodyParser = require('body-parser');
@@ -9,7 +10,8 @@ var app = express();
 app.use(bodyParser.json());
 
 var db;
-setupDatabase(function() {
+
+function requestHandlers () {
 
   // A (more-or-less) RESTful JSON API for the client-side Javascript to talk to
 
@@ -82,51 +84,53 @@ setupDatabase(function() {
   app.use(express.static(__dirname + '/public'));
 
   app.server = app.listen(3000);
-});
+};
 
-
-function setupDatabase(callback) {
-  db = new sqlite3.Database('movies.sqlite', function(err) {
-    if (err)
-      throw err;
+function setupDatabase() {
+  return Promise.resolve(
+    db = new sqlite3.Database('movies.sqlite', function(err) {
+      if (err)
+        throw err;
 
     db.all("SELECT name FROM sqlite_master WHERE type='table'", function(err, rows) {
-      if (err) throw err;
-      var tablenames = _.pluck(rows, 'name');
+        if (err) throw err;
+        var tablenames = _.pluck(rows, 'name');
 
-      // if the database schema is already setup; short-circuit
-      if (_.contains(tablenames, 'movie') && _.contains(tablenames, 'genre'))
-        return callback();
-
-      // Note: both the table creation & population below are DRY violations that a code review would catch
-      //   Normally we would write these as a callback loop via async.forEach() or generators
-      //   but for the sake of simplicity, I'm leaving them as nested callbacks
+        // if the database schema is already setup; short-circuit
+        if (_.contains(tablenames, 'movie') && _.contains(tablenames, 'genre'))
+          return;
 
       // else create the 2 tables we need
-      db.run('CREATE TABLE movie (pk varchar(32) PRIMARY KEY, name varchar(255), genre_fks varchar(255))', function(err) {
-        if (err) throw err;
-        db.run('CREATE TABLE genre (pk varchar(32) PRIMARY KEY, name varchar(100))', function(err) {
-          if (err) throw err;
-
-          // & populate the genres table
-          db.run('INSERT INTO genre (pk, name) VALUES ($1, $2)', [createUUID(), 'Action & Adventure'], function(err) {
-            if (err) throw err;
-            db.run('INSERT INTO genre (pk, name) VALUES ($1, $2)', [createUUID(), 'Kids & Family'], function(err) {
-              if (err) throw err;
-              db.run('INSERT INTO genre (pk, name) VALUES ($1, $2)', [createUUID(), 'Sci-Fi & Fantasy'], function(err) {
-                if (err) throw err;
-                callback();
-              });
-            });
-          });
-        });
+      var tables = [['movie', 'varchar(255)'], ['genre', 'varchar(100)']];
+      var createTableSql = 'CREATE TABLE $1 (pk varchar(32) PRIMARY KEY, name $2, genre_fks varchar(255))';      
+      async.Each(tables, function(table){
+        runDB(table, createTableSql)
+      })
+      // & populate the genres table
+      var genres = ['Action & Adventure', 'Kids & Family', 'Sci-Fi & Fantasy']
+      var insertSql = 'INSERT INTO genre (pk, name) VALUES ($1, $2)'
+      async.Each(genres, function(genre) {
+        var vals = [createUUID(), genre];
+        runDB(vals, insertSql);
+      })
+      return;
       });
-    });
-  });
+    })
+  )
+}
+
+function runDB(data, sql) {
+  db.run(sql, data, function(err) {
+      if(err) reject();
+  })
 }
 
 function createUUID() {
   return uuid.v4().replace(/-/g, '');
 }
+
+setupDatabase()
+  .then(requestHandlers())
+  .catch(err => {throw err});
 
 module.exports = app;
