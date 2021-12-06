@@ -5,6 +5,7 @@ var async = require('async')
 var assert = require('assert');
 var _ = require('underscore');
 var bodyParser = require('body-parser');
+var path = require('path');
 
 var app = express();
 app.use(bodyParser.json());
@@ -14,6 +15,13 @@ var db;
 function requestHandlers () {
 
   // A (more-or-less) RESTful JSON API for the client-side Javascript to talk to
+  app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, 'client/public', 'index.html'));
+  });
+
+  app.get('/express_backend', (req, res) => {
+    res.json({ express: 'This is your express backend' });
+  });
 
   app.get('/genres', function(req, res) {
     db.all('SELECT * FROM genre', function(err, rows) {
@@ -81,9 +89,9 @@ function requestHandlers () {
     });
   });
 
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/client/public'));
 
-  app.server = app.listen(3000);
+  app.server = app.listen(3000, () => console.log('Server is running'));
 };
 
 function setupDatabase() {
