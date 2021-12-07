@@ -9,12 +9,15 @@
   },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "start": "node server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"nodemon server\" \"npm run client\"",
     "test": "mocha test.js"
   },
   "dependencies": {
     "async": "^3.2.2",
     "body-parser": "^1.18.3",
+    "concurrently": "^6.4.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "sqlite3": "^4.0.6",
     "uuid": "1.4.1"

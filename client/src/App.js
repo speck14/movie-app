@@ -1,22 +1,13 @@
 import React from "react";
 
 function App() {
-  const [data, setData] = React.useState(null);
-
-  React.useEffect(() => {
-    return fetch("http://localhost:3000/express_backend")
-      .then((res) => res.text())
-      .then((data) => resolve(data? JSON.parse(data) : {}))
-      .catch(err => reject(err));
-}, []);
-
+  fetch('http://localhost:5000/express_backend')
+  .then(response => response.json())
+  .then(data => console.log(data));
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>{!data ? "Loading..." : data}</p>
-      </header>
-    </div>
+  <div className="App">
+  app
+  </div>
   );
-}
-
+  }
 export default App;
