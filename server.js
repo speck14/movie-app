@@ -18,7 +18,7 @@ var db;
 function requestHandlers() {
   // A (more-or-less) RESTful JSON API for the client-side Javascript to talk to
   //Handle all GET requests not otherwise specified using index.html
-app.get("/", function (req, res) {
+  app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "client/public", "index.html"));
   });
 
@@ -100,7 +100,7 @@ app.get("/", function (req, res) {
     });
   });
 
-  app.use(express.static(__dirname + '/client'));
+  app.use(express.static(__dirname + "/client"));
   app.use(express.static(__dirname + "client/build"));
 
   app.server = app.listen(5000, () => console.log("Server is running"));

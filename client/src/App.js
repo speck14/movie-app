@@ -1,19 +1,43 @@
 import React from "react";
 
-function App() {
-  const [data, setData] = React.useState(null);
+var Movie = ({ name, pk }) => <li>{name}</li>;
 
-  React.useEffect(() => {
-    fetch("http://localhost:5000/express_backend")
-      .then((res) => res.json())
-      .then(data => setData(data.express));
-  }, []);
+class MovieList extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <div className="App">
-      <h1 className="App-heading">Hello from React!</h1>
-      <p>{!data ? "Loading..." : data}</p>
-    </div>
-  );
+    this.state = {
+      movies: [],
+    };
+
+    this.getMovies = this.getMovies.bind(this);
+  }
+
+  async getMovies() {
+    const res = await fetch(`http://localhost:5000/movies`);
+    const data = await res.json();
+    return data;
+  }
+
+  async componentDidMount() {
+    const movies = await this.getMovies();
+    this.setState({ movies });
+  }
+
+  render() {
+    return (
+      <div>
+        <h2>Hello from react</h2>
+        <div>
+          <ul>
+            {this.state.movies.map((movie) => (
+              <Movie key={`${movie.pk}`} name={`${movie.name}`} />
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
 }
-export default App;
+
+export default MovieList;
