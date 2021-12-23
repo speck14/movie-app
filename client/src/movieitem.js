@@ -1,16 +1,17 @@
 /*
-12/20: On first load, the movieGenres is at least populating and list displaying
-On reloads, getting unhandled rejection (typeerror): cannot read properties of undefines(reading 'includes)
-WHY!?
---I'm guessing it has something to do with using the wrong React hooks?
-To do:
-1) Read up more on React hooks
-2) Move getGenres() outside of MovieItemView? (so that localhost:5000/genres isn't called with each reload),
-  but have to move data.forEach() inside because movieItem isn't available outside of MovieItemView
-  ^Idea for if React articles aren't helpful
+12/23: Sometimes get a fetch error: Unhandled Rejection (TypeError): Cannot read properties of undefined (reading 'includes') 
+-Error occurs when:
+  -Navigating to movie item view from main movie view page using links
+  -Refreshing from movie item view
+-App works when:
+  -A change is made to this JS file, saved, and the server automatically restarts
+-Response headers are OK, but movieItemData is undefined
+  -Might have something to do with using match to trigger useCallback? Is there something else I can use?
+
+Read up on fetch Type errors Monday
 */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 //import { Link } from "react-router-dom";
 
 var MovieInfo = ({ name }) => (
@@ -24,29 +25,32 @@ var DisplayGenres = ({ genreName }) => <li>{genreName}</li>;
 function MovieItemView({ match }) {
   var [movieItem, setMovieItem] = useState({}); //obj, key: genre_fks
   var [movieGenres, setGenres] = useState([]);
-  //var genres = [];
 
-  async function getMovieInfo() {
+  //useCallback to prevent infinite calls- this function will only run when match changes
+  const getMovieInfo = useCallback(async () => {
     var res = await fetch(`http://localhost:5000/movies/${match.params.pk}`);
     var data = await res.json();
     setMovieItem(data);
-  }
+  }, [match]);
 
+  //useMemo so we don't have to run this with every render??
   async function getGenres() {
     var res = await fetch(`http://localhost:5000/genres`);
     var data = await res.json();
+    console.log(`Genre data: ${data}`);
+    console.log(`MovieItem data: ${movieItem.genre_fks}`); //this is undefined when the fetch error occurs
     var genres = await data.filter((datum) => {
-      return movieItem.genre_fks.includes(datum.pk) 
-      });
-    await setGenres(genres);
+      return movieItem.genre_fks.includes(datum.pk);
+    });
+    setGenres(genres);
   }
 
   useEffect(() => {
     getMovieInfo()
       .then(getGenres())
-      .then(console.log(movieGenres))
-      .catch((err) => console.log(err));
-  }, []);
+      .then(console.log("useEffect ran!"))
+      .catch((err) => console.err);
+  }, [getMovieInfo]); //useEffect will only trigger when getMovieInfo runs (when match changes)
 
   return (
     <div>

@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 
 var Movie = ({ name, pk }) => (
   <li>
-    <Link to={`/movies/${pk}`}>
-      {name}
-    </Link>
+    <Link to={`/movies/${pk}`}>{name}</Link>
   </li>
 );
 
