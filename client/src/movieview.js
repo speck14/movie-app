@@ -13,10 +13,14 @@ function ListMovies() {
   var [movies, setMovies] = useState([]);
 
   async function getMovies() {
-    var res = await fetch("http://localhost:5000/movies");
-    var data = await res.json();
-    //fetches data, sets state to data (the JSON response)
-    setMovies(data);
+    try {
+      var res = await fetch("http://localhost:5000/movies");
+      var data = await res.json();
+      //fetches data, sets state to data (the JSON response)
+      setMovies(data);
+    } catch (e) {
+      console.error(e);
+    }
   }
   //useEffect hook calls getMovies after render, and React will also call this after performing the DOM updates
   //runs after every render by default
@@ -37,6 +41,9 @@ function ListMovies() {
             />
           ))}
         </ul>
+      </div>
+      <div className="addMovie">
+        <Link to={`/add`}>Add</Link>
       </div>
     </div>
   );
