@@ -46,20 +46,20 @@ function MovieItemView({ match }) {
       return movieItem.genre_fks.includes(genre.pk);
     });
     setGenres(currentMovieGenres);
-  }
+  };
 
   async function getAllGenres() {
     try {
       var res = await fetch(`http://localhost:5000/genres`);
       var data = await res.json();
       console.log(data);
-      await setAllGenres(...data);
+      await setAllGenres([...data]);
       console.log(`getAllGenres ran, allGenres: ${allGenres}`);
       getCurrentMovieGenres();
     } catch (e) {
       console.error(e);
     }
-  }
+  };
 
   async function getMovieInfo(pk) {
     try {
@@ -70,7 +70,7 @@ function MovieItemView({ match }) {
     } catch (e) {
       console.error(e);
     }
-  }
+  };
 
   useEffect(() => {
     getMovieInfo(match.params.pk).catch((e) => console.error(e));

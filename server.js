@@ -141,7 +141,7 @@ function setupDatabase() {
             "Sci-Fi & Fantasy",
           ];
           var insertSql = "INSERT INTO genre (pk, name) VALUES ($1, $2)";
-          async.Each(genres, function (genre) {
+          async.each(genres, function (genre) {
             var vals = [createUUID(), genre];
             runDB(vals, insertSql);
           });
