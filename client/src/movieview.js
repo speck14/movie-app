@@ -11,8 +11,8 @@ function ListMovies() {
   var [movies, setMovies] = useState([]);
   var [viewMovie, setViewMovie] = useState(false);
   var selectedMovie = useRef({});
-  var selectedMovieGenres = useRef(['init']);
-/*   var [selectedMovie, setSelectedMovie] = useState({});
+  var selectedMovieGenres = useRef([]);
+  /*   var [selectedMovie, setSelectedMovie] = useState({});
   var [selectedMovieGenres, setSelectedMovieGenres] = useState([]); */
 
   useEffect(() => {
@@ -41,14 +41,14 @@ function ListMovies() {
       } catch (e) {
         console.error(e);
       }
-    }; 
+    }
     async function getCurrentMovieGenres(allGenres) {
       var movieGenres = await allGenres.filter((genre) => {
         return selectedMovie.current.genre_fks.includes(genre.pk);
       });
-      selectedMovieGenres.current= movieGenres;
-      setViewMovie(true);  
-    };
+      selectedMovieGenres.current = movieGenres;
+      setViewMovie(true);
+    }
 
     getAllGenres();
   }
