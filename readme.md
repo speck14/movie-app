@@ -8,15 +8,27 @@ This assignment shouldn't require hundreds of lines of code. The important thing
 
 # Setup Instructions
 
+## Updated 1/3/22
+
 *Note: The below instructions assume Windows, but everything should work equally well on OS X or Linux, since these are all cross-platform technologies.*
 
 * [Download](http://nodejs.org/download/) & install node 32-bit, if you haven't already (64-bit is ok, but we recommend 32-bit because it has fewer prerequisites for building native addon modules on Windows)
 * `git clone https://github.com/CSNW/movie-app.git`
-* `npm install` (this will pull down all dependencies)
+* *Switch into react-assignment branch*
+* `npm install` (this will pull down all dependencies) from the root directory
+  - After server-side dependencies are installed, postinstall script in package.json will cd into client folder and install front-end dependencies
+* Run "npm test" from root directory, this will:
+  -  Test that the server and DB are working
+  - Insert data into the SQLiteDB to use when testing renders (movies.sqlite file)
+* Run "npm dev" from root directory to start the app
+  - If the app crashes and you receive error: "Error: Cannot find module 'C:\....movie-app\node_modules\sqlite3\lib\binding\node-v72-win32-ia32\node_sqlite3.node' -This is because you're using a different version of node. Need to be using node v 12.22.7 (32-bit)
+  - You might also need to run "npm uninstall sqlite3" then "npm install --save sqlite3"
 
 # Run the Tests
 
-In order to verify that everything was installed properly & is in working order, you should run the tests. The server tests can be run in node by typing `C:\movie-app\> npm test` from the root folder. The backbone model tests can be run in the browser by first firing up the server (`C:\movie-app\> node server.js`) and then navigating to `http://localhost:3000/tests.html` in a modern browser.
+In order to verify that everything was installed properly & is in working order, you should run the tests. The server tests can be run in node by typing `C:\movie-app\> npm test` from the root folder.
+
+**Perform the tests prior to running the app for the first time to populate the app with test data**
 
 # Assignment
 
