@@ -85,7 +85,7 @@ function ListMovies() {
         </div>
         <div className="addMovie">
           <button>
-            <Link to={`/add`}>Add</Link>
+            <Link to={`/add`} >Add</Link>
           </button>
         </div>
       </div>
