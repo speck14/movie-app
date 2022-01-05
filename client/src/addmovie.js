@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import ListMovies from "./movieview";
+import "./index.css";
+
+function GenreCheckbox({ name, pk }) {
+  return (
+    <div>
+      <input type="checkbox" id="{pk}" name="{name}"></input>
+      <label for="{pk}">{name}</label>
+    </div>
+  );
+}              
 
 function AddMovie(props) {
   var [addMovieView, setAddMovieView] = useState(true);
   var [submitted, setSubmitted] = useState(false);
   var [movieTitle, setMovieTitle] = useState("");
   var [movieGenre, setMovieGenre] = useState("");
-
   /*   var submitMovie = () => {
     fetch("http://localhost:5000/movies", {
       method: 'POST',
@@ -40,7 +49,7 @@ function AddMovie(props) {
         <h2>Add a movie:</h2>
         <form className="add-movie" onSubmit={handleSubmit}>
           <fieldset>
-            <div>
+            <div className="movie-title add-padding">
               <label for="movieTitle">Movie Title:</label>
               <input
                 type="text"
@@ -49,6 +58,12 @@ function AddMovie(props) {
                 value={movieTitle}
                 onChange={(e) => setMovieTitle(e.target.value)}
               ></input>
+            </div>
+            <div className="genre-checklist add-padding">
+            <legend className="genre-legend">Select genres:</legend>
+            {props.genres.map((genre) => (
+                    <GenreCheckbox key={`${genre.pk}`} name={`${genre.name}`} pk={`${genre.pk}`} />
+                  ))}
             </div>
             <div>
               <label for="genre">Genre(s):</label>
