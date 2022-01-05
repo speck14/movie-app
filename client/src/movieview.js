@@ -1,47 +1,52 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 import "./index.css";
+import AddMovie from "./addmovie.js";
 
 var Movie = ({ name }) => <li>{name}</li>;
 
 var MovieGenres = ({ genreName }) => <li>{genreName}</li>;
 
-//function using hooks
 function ListMovies() {
+  var [allMovieGenres, setAllMovieGenres] = useState([]);
   var [movies, setMovies] = useState([]);
   var [viewMovie, setViewMovie] = useState(false);
+  var [addMovieView, setAddMovieView] = useState(false);
   var selectedMovie = useRef({});
   var selectedMovieGenres = useRef([]);
-  /*   var [selectedMovie, setSelectedMovie] = useState({});
-  var [selectedMovieGenres, setSelectedMovieGenres] = useState([]); */
 
   useEffect(() => {
+    //fetch all movies from server
     async function getMovies() {
-      try {
-        var res = await fetch("http://localhost:5000/movies");
-        var data = await res.json();
-        //fetches data, sets state to data (the JSON response)
-        setMovies(data);
-      } catch (e) {
-        console.error(e);
-      }
+      var res = await fetch("http://localhost:5000/movies");
+      var data = await res.json();
+      //fetches data, sets state to data (the JSON response)
+      setMovies(data);
     }
-
-    getMovies();
+    async function getAllGenres() {
+      var res = await fetch(`http://localhost:5000/genres`);
+      var data = await res.json();
+      setAllMovieGenres(data);
+    }
+    //fetch all genres from server
+    getMovies()
+      .then(getAllGenres())
+      .catch((err) => {
+        if (err) throw err;
+      });
   }, []);
 
   //remember: 1) page renders 2) browser paints page 3) REACT STATES CHANGE
   //this is rendering the initial state, not the changed one- HOW TO FIX THAT?
+
+  //runs when add movie button is clicked
+  function handleAddMovieClick(e) {
+    e.preventDefault();
+    setAddMovieView(true);
+  }
+
+  //runs when movie is clicked
   function handleMovieViewClick() {
-    async function getAllGenres() {
-      try {
-        var res = await fetch(`http://localhost:5000/genres`);
-        var data = await res.json();
-        getCurrentMovieGenres(data);
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    //compare selected movie's genre foreign keys to all genres for matches
     async function getCurrentMovieGenres(allGenres) {
       var movieGenres = await allGenres.filter((genre) => {
         return selectedMovie.current.genre_fks.includes(genre.pk);
@@ -50,16 +55,16 @@ function ListMovies() {
       setViewMovie(true);
     }
 
-    getAllGenres();
+    getCurrentMovieGenres(allMovieGenres);
   }
-
+  //from movie view, runs when back button is clicked (returns to list view)
   function handleBackClick(e) {
     selectedMovie.current = {};
     selectedMovieGenres.current = [];
     setViewMovie(false);
   }
 
-  if (!viewMovie) {
+  if (!viewMovie && !addMovieView) {
     return (
       <div className="ListMovies">
         <h2>Movies:</h2>
@@ -84,10 +89,14 @@ function ListMovies() {
           </ul>
         </div>
         <div className="addMovie">
-          <button>
-            <Link to={`/add`} >Add</Link>
-          </button>
+          <button onClick={handleAddMovieClick}>Add Movie</button>
         </div>
+      </div>
+    );
+  } else if (!viewMovie && addMovieView) {
+    return (
+      <div>
+        <AddMovie genres={allMovieGenres} />
       </div>
     );
   } else {

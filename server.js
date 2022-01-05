@@ -1,3 +1,11 @@
+/*
+To-dos:
+-Don't need to return callbacks, just execute
+-Refactor async handling of setupDatabase
+  -async.waterfall() -> createTables and createGenres (move both out of the setupDatabase function)
+  -3 awaits in a row so you don't need waterfall
+*/
+
 var sqlite3 = require("sqlite3");
 var express = require("express");
 var uuid = require("uuid");
