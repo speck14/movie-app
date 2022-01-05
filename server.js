@@ -122,53 +122,39 @@ async function setupDatabase() {
           "Sci-Fi & Fantasy",
         ];
 
-        //This works:
-        db.run(tables[0], function (err) {
-          if (err) throw err;
-          db.run(tables[1], function (err) {
-            if (err) throw err;
-            async.each(
-              genres,
-              function (genre) {
-                var vals = [createUUID(), genre];
-                db.run(insertSql, vals);
-              },
-              function (err) {
-                console.error(err);
-              }
-            );
-          });
-        });
-        /* 
-        This does not work:
         async function createTables() {
-          await async.each(tables, function(table) {
-            db.run(table, function(err) {
-              if(err) throw err;
-            })
-          }, function(err) {
-            if(err) throw err;
-          });
-          createGenres();
-          };
+          await async.each(
+            tables,
+            function (table, cb) {
+              db.run(table, function (err) {
+                if (err) cb(err);
+                return cb();
+              });
+            },
+            function (err) {
+              if (err) console.error(err);
+              createGenres();
+            }
+          );
+        }
 
         async function createGenres() {
           await async.each(
             genres,
-            function (genre) {
+            function (genre, cb) {
               var vals = [createUUID(), genre];
-              db.run(insertSql, vals, function(err) {
-                if(err) throw err;
+              db.run(insertSql, vals, function (err) {
+                if (err) cb(err);
+                return cb();
               });
             },
             function (err) {
-              console.error(err);
+              if (err) console.error(err);
             }
           );
-        };
+        }
 
-        createTables()
-         */
+        createTables();
       }
     );
   });

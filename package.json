@@ -12,7 +12,8 @@
     "postinstall": "cd client && npm install",
     "client": "npm start --prefix client",
     "dev": "concurrently \"nodemon server\" \"npm run client\"",
-    "test": "mocha test.js"
+    "test": "mocha test.js",
+    "debug-server": "node --inspect-brk=5858 server.js"
   },
   "dependencies": {
     "async": "^3.2.2",
