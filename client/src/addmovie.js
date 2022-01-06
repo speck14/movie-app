@@ -1,21 +1,17 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import ListMovies from "./movieview";
+import Checkbox from "./checkbox";
 import "./index.css";
 
-function GenreCheckbox({ name, pk }) {
-  return (
-    <div>
-      <input type="checkbox" id="{pk}" name="{name}"></input>
-      <label for="{pk}">{name}</label>
-    </div>
-  );
-}              
-
-function AddMovie(props) {
+function AddMovie({genres}) {
   var [addMovieView, setAddMovieView] = useState(true);
   var [submitted, setSubmitted] = useState(false);
   var [movieTitle, setMovieTitle] = useState("");
-  var [movieGenre, setMovieGenre] = useState("");
+  var [checkedState, setCheckedState] = useState(
+    new Array(genres.length).fill(false)
+  );
+  
+  //var [checked, setChecked] = useState(false);
   /*   var submitMovie = () => {
     fetch("http://localhost:5000/movies", {
       method: 'POST',
@@ -23,16 +19,27 @@ function AddMovie(props) {
     })
   } */
 
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    if (!movieTitle || !movieGenre) {
-      alert("All fields must be completed");
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!movieTitle) {
+      alert("Movie must have a title");
       setSubmitted(false);
     } else {
-      setSubmitted(true);
+      setSubmitted(true);      
     }
     //onAdd({movieTitle, movieGenre})
+  }
+
+  var handleCheckChange = function (checkedIndex) {
+    var updatedCheckState = checkedState.map((item, index) => index === checkedIndex ? !item : item)
+    setCheckedState(updatedCheckState)
+  }
+
+  function handleClearClick(e) {
+      e.preventDefault();
+      setMovieTitle("");
+      setSubmitted(false);
+      setCheckedState(checkedState.map((item) => false))
   }
 
   function handleBackClick(e) {
@@ -50,47 +57,39 @@ function AddMovie(props) {
         <form className="add-movie" onSubmit={handleSubmit}>
           <fieldset>
             <div className="movie-title add-padding">
-              <label for="movieTitle">Movie Title:</label>
+              <label htmlFor="movieTitle">Movie Title:</label>
               <input
                 type="text"
                 id="movieTitle"
                 placeholder="Movie Title"
                 value={movieTitle}
+                
                 onChange={(e) => setMovieTitle(e.target.value)}
               ></input>
             </div>
             <div className="genre-checklist add-padding">
-            <legend className="genre-legend">Select genres:</legend>
-            {props.genres.map((genre) => (
-                    <GenreCheckbox key={`${genre.pk}`} name={`${genre.name}`} pk={`${genre.pk}`} />
-                  ))}
-            </div>
-            <div>
-              <label for="genre">Genre(s):</label>
-              <input
-                type="genre"
-                id="genre"
-                placeholder="Genre"
-                value={movieGenre}
-                onChange={(e) => setMovieGenre(e.target.value)}
-              ></input>
+              <legend className="genre-legend">Select genres:</legend>
+              {genres.map((genre, index) => (
+                <Checkbox
+                  key={genre.pk}
+                  name={genre.name}
+                  id={genre.pk}
+                  index={index}
+                  isChecked={checkedState[index]}
+                  eventHandler={handleCheckChange}                 
+                />
+              ))}
             </div>
           </fieldset>
           <button type="submit">Submit</button>
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              setMovieTitle("");
-              setMovieGenre("");
-              setSubmitted(false);
-            }}
-          >
+            onClick={handleClearClick}>
             Clear
           </button>
         </form>
         {submitted && (
           <div>
-            <h3>Movie Title: {movieTitle}</h3> <p>Movie genre: {movieGenre}</p>
+            <h3>Movie Title: {movieTitle}</h3>
           </div>
         )}
         <button onClick={handleBackClick}>Back to all movies</button>
