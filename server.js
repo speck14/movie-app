@@ -136,7 +136,7 @@ async function setupDatabase() {
             function (table, cb) {
               db.run(table, function (err) {
                 if (err) cb(err);
-                return cb();
+                cb();
               });
             },
             function (err) {
@@ -153,7 +153,7 @@ async function setupDatabase() {
               var vals = [createUUID(), genre];
               db.run(insertSql, vals, function (err) {
                 if (err) cb(err);
-                return cb();
+                cb();
               });
             },
             function (err) {
