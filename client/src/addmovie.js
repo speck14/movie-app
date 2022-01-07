@@ -15,16 +15,16 @@ function AddMovie({ genres }) {
   var [selectedGenreNames, setSelectedGenreNames] = useState([]);
   //var [selectedGenres, setSelectedGenres] = useState([]);
   var [submitted, setSubmitted] = useState(false);
-  
+
   var selectedGenres = [];
 
   async function submitMovie() {
-     await fetch("http://localhost:5000/movies", {
+    await fetch("http://localhost:5000/movies", {
       method: "POST",
-      headers: {"Content-type": "application/json"},
+      headers: { "Content-type": "application/json" },
       body: JSON.stringify({ name: movieTitle, genre_fks: selectedGenres }),
     });
-  };
+  }
 
   async function checkedGenres() {
     var checkedGenreArr = [];
@@ -33,9 +33,9 @@ function AddMovie({ genres }) {
         checkedGenreArr.push(genres[index]);
       }
     });
-      selectedGenres = await checkedGenreArr.map((item) => {
-        return item.pk;
-      })
+    selectedGenres = await checkedGenreArr.map((item) => {
+      return item.pk;
+    });
     setSelectedGenreNames(
       await checkedGenreArr.map((item) => {
         return item.name;
@@ -53,7 +53,6 @@ function AddMovie({ genres }) {
       await checkedGenres();
       submitMovie();
     }
-
   }
 
   var handleCheckChange = function (checkedIndex) {

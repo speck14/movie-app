@@ -1,16 +1,16 @@
 import React from "react";
 import "./index.css";
 
-function Checkbox({ name, id, index, isChecked, eventHandler}) {
+function Checkbox({ name, id, index, isChecked, eventHandler }) {
   return (
     <div className="checkbox">
       <label htmlFor={name}>
-      <input
+        <input
           type="checkbox"
           id={name}
           name={name}
           value={id}
-          checked= {isChecked}
+          checked={isChecked}
           onChange={() => eventHandler(index)}
         />
         {name} <b>{isChecked.toString()}</b>
