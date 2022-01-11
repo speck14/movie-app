@@ -3,6 +3,7 @@ import Button from "./button";
 import EditMovie from "./editMovie";
 import "./index.css";
 
+//Genres associated with the current movie are listed
 var MovieGenres = ({ genreName }) => <li>{genreName}</li>;
 
 function MovieItem({

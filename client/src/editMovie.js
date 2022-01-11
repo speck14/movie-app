@@ -6,6 +6,9 @@ function EditMovie({ movieTitle, currentGenres, allGenres }) {
   var [updatedTitle, setUpdatedTitle] = useState(movieTitle);
   var [submitted, setSubmitted] = useState(false);
 
+    /*Wrapper functions can be passed to child components, allowing the child component to update state in
+    its parent
+  */
   var checkedStateWrapper = function (data) {
     setCheckedState(data);
   };
@@ -16,6 +19,14 @@ function EditMovie({ movieTitle, currentGenres, allGenres }) {
     setUpdatedTitle(data);
   };
 
+  /*Creates new array (initSelectedGenres) with "true" values for movie's current genres on initial rendering.
+  CurrentGenre's genre locations are checked with allGenres, to ensure that the genre's index in allGenres is
+  marked true in initSelectedGenres. This way, if the order of currentGenres changes, the correct genre will 
+  be associated with the movie when it is updated.
+
+  This function "checks" the checkboxes for the genres currently associated with the movie when user enters
+  the edit form.
+  */ 
   function initialCheck() {
     var initSelectedGenres = new Array(allGenres.length).fill(false);
     currentGenres.forEach((movieGenre) => {
@@ -27,6 +38,11 @@ function EditMovie({ movieTitle, currentGenres, allGenres }) {
     });
     return initSelectedGenres;
   }
+
+  /*async function submitMovie() {
+
+  }
+  */
 
   async function handleSubmit(e) {
     e.preventDefault();

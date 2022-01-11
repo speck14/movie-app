@@ -4,6 +4,7 @@ import AddMovie from "./addmovie";
 import Button from "./button";
 import MovieItem from "./movieItem";
 
+//list items for individual movies
 var Movie = ({ name }) => <li>{name}</li>;
 
 function MovieList() {
@@ -11,6 +12,11 @@ function MovieList() {
   var [movies, setMovies] = useState([]);
   var [viewMovie, setViewMovie] = useState(false);
   var [addMovieView, setAddMovieView] = useState(false);
+  /*
+  useRef- hook that accepts initial argument and returns a reference referred to using current property
+    reference.current = newValue
+  useRef persists between re-renderings, updates synchronously, and update doesn't trigger a re-rendering (unlike useState)
+  */
   var selectedMovie = useRef({});
   var selectedMovieGenres = useRef([]);
 
@@ -66,14 +72,21 @@ function MovieList() {
   }
 
   if (!viewMovie && !addMovieView) {
+    //this is what renders initially on startup, when neither a single movie view nor "add movie" are selected (all movies list)
     return (
       <div className="ListMovies">
         <h1>Movies:</h1>
         <div className="MovieList">
           <ul>
             {movies.map((movie) => (
+              /*
+              I wanted the user to "feel" like they're being directed to individual movie's page, but under the hood React 
+              is conditionally rendering the movie view component, not directing the user somewhere.
+              
+              I used button's ability to perform an action, with CSS styling to make the button look like a link instead.
+              */
               <button
-                key={movie.pk}
+                key={movie.pk} //list items in React must have unique keys
                 className="buttonToLink"
                 onClick={(e) => {
                   e.preventDefault();
@@ -92,6 +105,7 @@ function MovieList() {
       </div>
     );
   } else if (!viewMovie && addMovieView) {
+    //renders when addMovieView is selected
     return (
       <div>
         <AddMovie genres={allMovieGenres} />
@@ -99,6 +113,7 @@ function MovieList() {
       </div>
     );
   } else {
+    //when individual movie view has been selected
     return (
       <div>
         <MovieItem

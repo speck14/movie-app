@@ -14,6 +14,10 @@ function MovieForm({
   movieTitle = "",
   currentGenres = "",
 }) {
+  /*When you update a state, the existing state is totally replaced with the new value.
+  Checks the checkedState array for which value has been changed, creates a new array of
+  true/false values based on the change, and updates checkedState with the new array
+  */
   var handleCheckChange = function (checkedIndex) {
     var updatedCheckState = checkedState.map((item, index) =>
       index === checkedIndex ? !item : item

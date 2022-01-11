@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import MovieForm from "./form";
+import MovieItem from "./movieItem";
 import "./index.css";
 
+//once a movie is added, the newly added movie title is rendered & associated genres are listed
 var SubmittedGenres = ({ name }) => <li>{name}</li>;
 
 function AddMovie({ genres }) {
-  //genres: an array of objects with pk and name
   var [checkedState, setCheckedState] = useState(
+    /*Generates new array of "false" values, same length as array of all genres.
+      When user selects a genre, the index of that is associated with the genre in the original "allGenres"
+      array.
+      */
     new Array(genres.length).fill(false)
   );
   var [movieTitle, setMovieTitle] = useState("");
@@ -14,6 +19,9 @@ function AddMovie({ genres }) {
   var [submitted, setSubmitted] = useState(false);
   var selectedGenres = [];
 
+  /*Wrapper functions can be passed to child components, allowing the child component to update state in
+    its parent
+  */
   var checkedStateWrapper = function (data) {
     setCheckedState(data);
   };
@@ -31,9 +39,17 @@ function AddMovie({ genres }) {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ name: movieTitle, genre_fks: selectedGenres }),
+    }).then((data) => {
+      console.log(data)
     });
   }
 
+  /*
+  For each checked box in checkedGenres when form is submitted, pushes the genre from all genres to an array,
+  which is then used to get pks and names for selected genres.
+  PKs are used when submitting to the database (as genre_fks), and names are used when rendering added movie
+  to the user
+  */
   async function checkedGenres() {
     var checkedGenreArr = [];
     await checkedState.forEach((item, index) => {
@@ -67,7 +83,7 @@ function AddMovie({ genres }) {
     <div>
       {!submitted ? (
         <div>
-          <h2>Add a movie:</h2>
+          <h1>Add a movie:</h1>
           <div className="add-padding">
             <MovieForm
               className="add-movie"
@@ -83,7 +99,9 @@ function AddMovie({ genres }) {
         </div>
       ) : (
         <div>
-          <h3>Submitted movie: {movieTitle}</h3>
+          <h1>Submitted: </h1>
+          <h2>{movieTitle}</h2>
+          <h3>Genres:</h3>
           <ul>
             {selectedGenreNames.map((genre, index) => (
               <SubmittedGenres key={`${index}`} name={`${genre}`} />
