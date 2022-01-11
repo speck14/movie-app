@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import ListMovies from "./movieview";
+import MovieList from "./app";
 
 ReactDOM.render(
- <ListMovies />,
+ <MovieList />,
   document.getElementById("root")
 );

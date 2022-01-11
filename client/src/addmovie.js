@@ -1,22 +1,30 @@
 import React, { useState } from "react";
-import ListMovies from "./movieview";
-import Checkbox from "./checkbox";
+import MovieForm from "./form";
 import "./index.css";
 
 var SubmittedGenres = ({ name }) => <li>{name}</li>;
 
 function AddMovie({ genres }) {
   //genres: an array of objects with pk and name
-  var [addMovieView, setAddMovieView] = useState(true);
   var [checkedState, setCheckedState] = useState(
     new Array(genres.length).fill(false)
   );
   var [movieTitle, setMovieTitle] = useState("");
   var [selectedGenreNames, setSelectedGenreNames] = useState([]);
-  //var [selectedGenres, setSelectedGenres] = useState([]);
   var [submitted, setSubmitted] = useState(false);
-
   var selectedGenres = [];
+
+  var checkedStateWrapper = function (data) {
+    setCheckedState(data);
+  };
+
+  var titleStateWrapper = function (data) {
+    setMovieTitle(data);
+  };
+
+  var submitStateWrapper = function (data) {
+    setSubmitted(data);
+  };
 
   async function submitMovie() {
     await fetch("http://localhost:5000/movies", {
@@ -55,77 +63,36 @@ function AddMovie({ genres }) {
     }
   }
 
-  var handleCheckChange = function (checkedIndex) {
-    var updatedCheckState = checkedState.map((item, index) =>
-      index === checkedIndex ? !item : item
-    );
-    setCheckedState(updatedCheckState);
-  };
-
-  function handleClearClick(e) {
-    e.preventDefault();
-    setMovieTitle("");
-    setSubmitted(false);
-    setCheckedState(checkedState.map((item) => false));
-  }
-
-  function handleBackClick(e) {
-    e.preventDefault();
-    setAddMovieView(false);
-    <ListMovies />;
-  }
-
-  if (!addMovieView) {
-    return <ListMovies />;
-  } else {
-    return (
-      <div>
-        <h2>Add a movie:</h2>
-        <form className="add-movie" onSubmit={handleSubmit}>
-          <fieldset>
-            <div className="movie-title add-padding">
-              <label htmlFor="movieTitle">Movie Title:</label>
-              <input
-                type="text"
-                id="movieTitle"
-                placeholder="Movie Title"
-                value={movieTitle}
-                onChange={(e) => setMovieTitle(e.target.value)}
-              ></input>
-            </div>
-            <div className="genre-checklist add-padding">
-              <legend className="genre-legend">Select genres:</legend>
-              {genres.map((genre, index) => (
-                <Checkbox
-                  key={genre.pk}
-                  name={genre.name}
-                  id={genre.pk}
-                  index={index}
-                  isChecked={checkedState[index]}
-                  eventHandler={handleCheckChange}
-                />
-              ))}
-            </div>
-          </fieldset>
-          <button type="submit" onClick={handleSubmit}>
-            Submit
-          </button>
-          <button onClick={handleClearClick}>Clear</button>
-        </form>
-        {submitted && (
-          <div>
-            <h3>Submitted movie: {movieTitle}</h3>
-            <ul>
-              {selectedGenreNames.map((genre, index) => (
-                <SubmittedGenres key={`${index}`} name={`${genre}`} />
-              ))}
-            </ul>
+  return (
+    <div>
+      {!submitted ? (
+        <div>
+          <h2>Add a movie:</h2>
+          <div className="add-padding">
+            <MovieForm
+              className="add-movie"
+              submitStateHandler={submitStateWrapper}
+              submitHandler={handleSubmit}
+              allGenres={genres}
+              checkedState={checkedState}
+              checkHandler={checkedStateWrapper}
+              titleChangeHandler={titleStateWrapper}
+              movieTitle={movieTitle}
+            />
           </div>
-        )}
-        <button onClick={handleBackClick}>Back to all movies</button>
-      </div>
-    );
-  }
+        </div>
+      ) : (
+        <div>
+          <h3>Submitted movie: {movieTitle}</h3>
+          <ul>
+            {selectedGenreNames.map((genre, index) => (
+              <SubmittedGenres key={`${index}`} name={`${genre}`} />
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default AddMovie;

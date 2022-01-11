@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./index.css";
-import AddMovie from "./addmovie.js";
+import AddMovie from "./addmovie";
+import Button from "./button";
+import MovieItem from "./movieItem";
 
 var Movie = ({ name }) => <li>{name}</li>;
 
-var MovieGenres = ({ genreName }) => <li>{genreName}</li>;
-
-function ListMovies() {
+function MovieList() {
   var [allMovieGenres, setAllMovieGenres] = useState([]);
   var [movies, setMovies] = useState([]);
   var [viewMovie, setViewMovie] = useState(false);
@@ -15,11 +15,9 @@ function ListMovies() {
   var selectedMovieGenres = useRef([]);
 
   useEffect(() => {
-    //fetch all movies from server
     async function getMovies() {
       var res = await fetch("http://localhost:5000/movies");
       var data = await res.json();
-      //fetches data, sets state to data (the JSON response)
       setMovies(data);
     }
     async function getAllGenres() {
@@ -27,16 +25,13 @@ function ListMovies() {
       var data = await res.json();
       setAllMovieGenres(data);
     }
-    //fetch all genres from server
+
     getMovies()
       .then(getAllGenres())
       .catch((err) => {
         if (err) throw err;
       });
-  }, []);
-
-  //remember: 1) page renders 2) browser paints page 3) REACT STATES CHANGE
-  //this is rendering the initial state, not the changed one- HOW TO FIX THAT?
+  }, [addMovieView, viewMovie]);
 
   //runs when add movie button is clicked
   function handleAddMovieClick(e) {
@@ -59,15 +54,17 @@ function ListMovies() {
   }
   //from movie view, runs when back button is clicked (returns to list view)
   function handleBackClick(e) {
+    e.preventDefault();
     selectedMovie.current = {};
     selectedMovieGenres.current = [];
     setViewMovie(false);
+    setAddMovieView(false);
   }
 
   if (!viewMovie && !addMovieView) {
     return (
       <div className="ListMovies">
-        <h2>Movies:</h2>
+        <h1>Movies:</h1>
         <div className="MovieList">
           <ul>
             {movies.map((movie) => (
@@ -76,20 +73,16 @@ function ListMovies() {
                 onClick={(e) => {
                   e.preventDefault();
                   selectedMovie.current = movie;
-                  handleMovieViewClick(movie);
+                  handleMovieViewClick();
                 }}
               >
-                <Movie
-                  key={`${movie.pk}`}
-                  name={`${movie.name}`}
-                  pk={`${movie.pk}`}
-                />
+                <Movie key={movie.pk} name={movie.name} pk={movie.pk} />
               </button>
             ))}
           </ul>
         </div>
         <div className="addMovie">
-          <button onClick={handleAddMovieClick}>Add Movie</button>
+          <Button clickHandler={handleAddMovieClick} text="Add Movie" />
         </div>
       </div>
     );
@@ -97,23 +90,21 @@ function ListMovies() {
     return (
       <div>
         <AddMovie genres={allMovieGenres} />
+        <Button clickHandler={handleBackClick} text="Back to all movies" />
       </div>
     );
   } else {
     return (
-      <div className="movieItemView">
-        <h2>{selectedMovie.current.name}</h2>
-        <div className="genreList">
-          <ul>
-            {selectedMovieGenres.current.map((genre) => (
-              <MovieGenres key={`${genre.pk}`} genreName={`${genre.name}`} />
-            ))}
-          </ul>
-        </div>
-        <button onClick={handleBackClick}>Back to all movies</button>
+      <div>
+        <MovieItem
+          selectedMovieTitle={selectedMovie.current.name}
+          currentGenres={selectedMovieGenres.current}
+          allGenres={allMovieGenres}
+        />
+        <Button clickHandler={handleBackClick} text="Back to all movies" />
       </div>
     );
   }
 }
 
-export default ListMovies;
+export default MovieList;
