@@ -1,10 +1,8 @@
-import { React, useState } from "react";
+import { React, useState} from "react";
 import MovieForm from "./form";
 
 function EditMovie({ movieTitle, currentGenres, allGenres }) {
-  var [checkedState, setCheckedState] = useState(
-    new Array(allGenres.length).fill(false)
-  );
+  var [checkedState, setCheckedState] = useState(initialCheck());
   var [updatedTitle, setUpdatedTitle] = useState(movieTitle);
   var [submitted, setSubmitted] = useState(false);
 
@@ -17,6 +15,18 @@ function EditMovie({ movieTitle, currentGenres, allGenres }) {
   var updatedTitleWrapper = function (data) {
     setUpdatedTitle(data);
   };
+
+  function initialCheck() {
+    var initSelectedGenres = new Array(allGenres.length).fill(false);
+    currentGenres.forEach((movieGenre) => {
+      allGenres.forEach((genre, index) => {
+        if (genre.pk === movieGenre.pk) {
+          initSelectedGenres[index] = true;
+        }
+      });
+    });
+    return initSelectedGenres;
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();

@@ -14,6 +14,10 @@ function MovieList() {
   var selectedMovie = useRef({});
   var selectedMovieGenres = useRef([]);
 
+  var movieViewWrapper = function (data) {
+    setViewMovie(data);
+  };
+
   useEffect(() => {
     async function getMovies() {
       var res = await fetch("http://localhost:5000/movies");
@@ -49,9 +53,9 @@ function MovieList() {
       selectedMovieGenres.current = movieGenres;
       setViewMovie(true);
     }
-
     getCurrentMovieGenres(allMovieGenres);
   }
+
   //from movie view, runs when back button is clicked (returns to list view)
   function handleBackClick(e) {
     e.preventDefault();
@@ -69,6 +73,7 @@ function MovieList() {
           <ul>
             {movies.map((movie) => (
               <button
+                key={movie.pk}
                 className="buttonToLink"
                 onClick={(e) => {
                   e.preventDefault();
@@ -76,7 +81,7 @@ function MovieList() {
                   handleMovieViewClick();
                 }}
               >
-                <Movie key={movie.pk} name={movie.name} pk={movie.pk} />
+                <Movie name={movie.name} pk={movie.pk} />
               </button>
             ))}
           </ul>
@@ -98,8 +103,10 @@ function MovieList() {
       <div>
         <MovieItem
           selectedMovieTitle={selectedMovie.current.name}
+          selectedMoviePK={selectedMovie.current.pk}
           currentGenres={selectedMovieGenres.current}
           allGenres={allMovieGenres}
+          movieViewSetter={movieViewWrapper}
         />
         <Button clickHandler={handleBackClick} text="Back to all movies" />
       </div>

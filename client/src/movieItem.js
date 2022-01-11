@@ -1,15 +1,33 @@
 import { React, useState } from "react";
 import Button from "./button";
 import EditMovie from "./editMovie";
+import "./index.css";
 
 var MovieGenres = ({ genreName }) => <li>{genreName}</li>;
 
-function MovieItem({ selectedMovieTitle, currentGenres, allGenres }) {
+function MovieItem({
+  selectedMovieTitle,
+  selectedMoviePK,
+  currentGenres,
+  allGenres,
+  movieViewSetter,
+}) {
   var [editMovieView, setEditMovieView] = useState(false);
 
-  function onButtonClick(e) {
+  function onEditCancelClick(e) {
     e.preventDefault();
     setEditMovieView(!editMovieView);
+  }
+
+  async function onDeleteClick(e) {
+    e.preventDefault();
+    if (
+      window.confirm(`Are you sure you want to delete ${selectedMovieTitle}?`)
+    ) {
+      await fetch(`http://localhost:5000/movies/${selectedMoviePK}`, {
+        method: "DELETE",
+      }).then(movieViewSetter(false));
+    }
   }
 
   return (
@@ -21,7 +39,12 @@ function MovieItem({ selectedMovieTitle, currentGenres, allGenres }) {
             currentGenres={currentGenres}
             allGenres={allGenres}
           />
-          <Button clickHandler={onButtonClick} text="Cancel" />
+          <div className="display-inline lft-pd">
+          <Button clickHandler={onEditCancelClick} text="Cancel" />
+          <div className="display-inline lft-pd">
+          <Button clickHandler={onDeleteClick} text="Delete" />
+          </div>
+          </div>
         </div>
       ) : (
         <div className="movieItemView add-padding">
@@ -33,7 +56,12 @@ function MovieItem({ selectedMovieTitle, currentGenres, allGenres }) {
               ))}
             </ul>
           </div>
-          <Button clickHandler={onButtonClick} text="Edit" />
+          <div className="display-inline">
+            <Button clickHandler={onEditCancelClick} text="Edit" />
+          </div>
+          <div className="display-inline lft-pd">
+            <Button clickHandler={onDeleteClick} text="Delete" />
+          </div>
         </div>
       )}
     </div>

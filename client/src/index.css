@@ -22,3 +22,7 @@
 .display-inline {
   display: inline;
 }
+
+.lft-pd {
+  padding-left: 10px;
+}

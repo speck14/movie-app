@@ -1,6 +1,7 @@
 import { React } from "react";
 import Checkbox from "./checkbox";
 import Button from "./button";
+import "./index.css"
 
 function MovieForm({
   className,
@@ -28,7 +29,7 @@ function MovieForm({
   }
 
   return (
-    <form className={className} onSubmit={submitHandler}>
+    <form className={` add-padding ${className}`} onSubmit={submitHandler}>
       <fieldset>
         <div className="movie-title add-padding">
           <label htmlFor="movieTitle">Movie Title:</label>
@@ -53,8 +54,12 @@ function MovieForm({
             />
           ))}
         </div>
+        <div className="display-inline">
         <Button clickHandler={submitHandler} text="Submit" />
+        <div className="display-inline lft-pd">
         <Button clickHandler={handleClearClick} text="Clear" />
+        </div>
+        </div>
       </fieldset>
     </form>
   );
