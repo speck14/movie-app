@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useState } from "react";
 import Checkbox from "./checkbox";
 import Button from "./button";
 import "./index.css"
@@ -11,9 +11,9 @@ function MovieForm({
   checkedState,
   checkHandler,
   titleChangeHandler,
-  movieTitle = "",
-  currentGenres = "",
+  movieTitle = ""
 }) {
+  var [initTitle] = useState([movieTitle])
   /*When you update a state, the existing state is totally replaced with the new value.
   Checks the checkedState array for which value has been changed, creates a new array of
   true/false values based on the change, and updates checkedState with the new array
@@ -27,9 +27,9 @@ function MovieForm({
 
   function handleClearClick(e) {
     e.preventDefault();
-    titleChangeHandler("");
     submitStateHandler(false);
     checkHandler(checkedState.map((item) => false));
+    initTitle? titleChangeHandler(initTitle) : titleChangeHandler('');
   }
 
   return (

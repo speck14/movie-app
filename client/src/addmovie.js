@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import MovieForm from "./form";
-import MovieItem from "./movieItem";
 import "./index.css";
 
 //once a movie is added, the newly added movie title is rendered & associated genres are listed
@@ -39,8 +38,11 @@ function AddMovie({ genres }) {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ name: movieTitle, genre_fks: selectedGenres }),
-    }).then((data) => {
-      console.log(data)
+    }).then((data, err) => {
+      if (!data.ok || err) {
+        throw Error;
+      }
+      setSubmitted(true);
     });
   }
 
@@ -49,6 +51,9 @@ function AddMovie({ genres }) {
   which is then used to get pks and names for selected genres.
   PKs are used when submitting to the database (as genre_fks), and names are used when rendering added movie
   to the user
+  
+  You can't use state to submit the selected genres, because state updates when React renders. This means the
+  selectedGenre PKs won't update until after the page renders, so they'll be behind by one update.
   */
   async function checkedGenres() {
     var checkedGenreArr = [];
@@ -73,7 +78,6 @@ function AddMovie({ genres }) {
       alert("Movie must have a title");
       setSubmitted(false);
     } else {
-      setSubmitted(true);
       await checkedGenres();
       submitMovie();
     }
@@ -104,7 +108,7 @@ function AddMovie({ genres }) {
           <h3>Genres:</h3>
           <ul>
             {selectedGenreNames.map((genre, index) => (
-              <SubmittedGenres key={`${index}`} name={`${genre}`} />
+              <SubmittedGenres key={`${index}`} name={`${genre}`} /> //key={genre.pk} name={genre.name}
             ))}
           </ul>
         </div>

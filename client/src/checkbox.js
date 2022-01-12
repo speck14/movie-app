@@ -13,7 +13,7 @@ function Checkbox({ name, id, index, isChecked, eventHandler }) {
           checked={isChecked}
           onChange={() => eventHandler(index)}
         />
-        {name} <b>{isChecked.toString()}</b>
+        {name}
       </label>
     </div>
   );

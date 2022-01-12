@@ -27,7 +27,12 @@ function MovieItem({
     ) {
       await fetch(`http://localhost:5000/movies/${selectedMoviePK}`, {
         method: "DELETE",
-      }).then(movieViewSetter(false));
+      }).then((data, err) => {
+        if (!data.ok || err) {
+          throw Error;
+        }
+        movieViewSetter(false);
+      });
     }
   }
 
@@ -37,15 +42,12 @@ function MovieItem({
         <div className="add-padding">
           <EditMovie
             movieTitle={selectedMovieTitle}
+            moviePK={selectedMoviePK}
             currentGenres={currentGenres}
             allGenres={allGenres}
+            cancelClickHandler={onEditCancelClick}
+            deleteClickHandler={onDeleteClick}
           />
-          <div className="display-inline lft-pd">
-          <Button clickHandler={onEditCancelClick} text="Cancel" />
-          <div className="display-inline lft-pd">
-          <Button clickHandler={onDeleteClick} text="Delete" />
-          </div>
-          </div>
         </div>
       ) : (
         <div className="movieItemView add-padding">
@@ -57,11 +59,11 @@ function MovieItem({
               ))}
             </ul>
           </div>
-          <div className="display-inline">
-            <Button clickHandler={onEditCancelClick} text="Edit" />
-          </div>
           <div className="display-inline lft-pd">
-            <Button clickHandler={onDeleteClick} text="Delete" />
+            <Button clickHandler={onEditCancelClick} text="Edit" />
+            <div className="display-inline lft-pd">
+              <Button clickHandler={onDeleteClick} text="Delete" />
+            </div>
           </div>
         </div>
       )}

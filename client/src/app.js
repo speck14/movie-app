@@ -20,9 +20,9 @@ function MovieList() {
   var selectedMovie = useRef({});
   var selectedMovieGenres = useRef([]);
 
-  var movieViewWrapper = function (data) {
+  function movieViewWrapper(data) {
     setViewMovie(data);
-  };
+  }
 
   useEffect(() => {
     async function getMovies() {
