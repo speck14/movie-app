@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./index.css";
+import MovieList from "./movieList";
 import AddMovie from "./addmovie";
 import Button from "./button";
 import MovieItem from "./movieItem";
 
-//list items for individual movies
-var Movie = ({ name }) => <li>{name}</li>;
 
-function MovieList() {
+function App() {
   var [allMovieGenres, setAllMovieGenres] = useState([]);
   var [movies, setMovies] = useState([]);
   var [viewMovie, setViewMovie] = useState(false);
@@ -74,31 +73,8 @@ function MovieList() {
   if (!viewMovie && !addMovieView) {
     //this is what renders initially on startup, when neither a single movie view nor "add movie" are selected (all movies list)
     return (
-      <div className="ListMovies">
-        <h1>Movies:</h1>
-        <div className="MovieList">
-          <ul>
-            {movies.map((movie) => (
-              /*
-              I wanted the user to "feel" like they're being directed to individual movie's page, but under the hood React 
-              is conditionally rendering the movie view component, not directing the user somewhere.
-              
-              I used button's ability to perform an action, with CSS styling to make the button look like a link instead.
-              */
-              <button
-                key={movie.pk} //list items in React must have unique keys
-                className="buttonToLink"
-                onClick={(e) => {
-                  e.preventDefault();
-                  selectedMovie.current = movie;
-                  handleMovieViewClick();
-                }}
-              >
-                <Movie name={movie.name} pk={movie.pk} />
-              </button>
-            ))}
-          </ul>
-        </div>
+      <div>
+        <MovieList allMovies={movies} selectedMovie={selectedMovie} movieClick={handleMovieViewClick}/>
         <div className="addMovie">
           <Button clickHandler={handleAddMovieClick} text="Add Movie" />
         </div>
@@ -129,4 +105,4 @@ function MovieList() {
   }
 }
 
-export default MovieList;
+export default App;
