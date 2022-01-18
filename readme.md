@@ -20,7 +20,7 @@ This assignment shouldn't require hundreds of lines of code. The important thing
 * Run "npm test" from root directory, this will:
   -  Test that the server and DB are working
   - Insert data into the SQLiteDB to use when testing renders (movies.sqlite file)
-* Run "npm dev" from root directory to start the app
+* Run "npm run dev" from root directory to start the app
   - If the app crashes and you receive error: "Error: Cannot find module 'C:\....movie-app\node_modules\sqlite3\lib\binding\node-v72-win32-ia32\node_sqlite3.node' -This is because you're using a different version of node. Need to be using node v 12.22.7 (32-bit)
   - You might also need to run "npm uninstall sqlite3" then "npm install --save sqlite3"
 
