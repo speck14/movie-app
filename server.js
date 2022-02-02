@@ -119,53 +119,57 @@ async function setupDatabase() {
           return;
 
         // else create the 2 tables we need
-        var tables = [
-          "CREATE TABLE movie (pk varchar(32) PRIMARY KEY, name varchar(255), genre_fks varchar(255))",
-          "CREATE TABLE genre (pk varchar(32) PRIMARY KEY, name varchar(100))",
-        ];
-        var insertSql = "INSERT INTO genre (pk, name) VALUES ($1, $2)";
-        var genres = [
-          "Action & Adventure",
-          "Kids & Family",
-          "Sci-Fi & Fantasy",
-        ];
-
-        async function createTables() {
-          await async.each(
-            tables,
-            function (table, cb) {
-              db.run(table, function (err) {
-                if (err) cb(err);
-                cb();
-              });
-            },
-            function (err) {
-              if (err) console.error(err);
-              createGenres();
-            }
-          );
-        }
-
-        async function createGenres() {
-          await async.each(
-            genres,
-            function (genre, cb) {
-              var vals = [createUUID(), genre];
-              db.run(insertSql, vals, function (err) {
-                if (err) cb(err);
-                cb();
-              });
-            },
-            function (err) {
-              if (err) console.error(err);
-            }
-          );
-        }
-
-        createTables();
+        insertSQL();
       }
     );
   });
+}
+
+function insertSQL() {
+  // else create the 2 tables we need
+  var tables = [
+    "CREATE TABLE movie (pk varchar(32) PRIMARY KEY, name varchar(255), genre_fks varchar(255))",
+    "CREATE TABLE genre (pk varchar(32) PRIMARY KEY, name varchar(100))",
+  ];
+  var insertSql = "INSERT INTO genre (pk, name) VALUES ($1, $2)";
+  var genres = ["Action & Adventure", "Kids & Family", "Sci-Fi & Fantasy"];
+
+  async function createTables() {
+    await async.each(
+      tables,
+      function (table, cb) {
+        db.run(table, function (err) {
+          if (err) throw err;
+          return cb();
+        });
+      },
+      function (err) {
+        if (err) console.error(err);
+        createGenres();
+      }
+    );
+  }
+
+  async function createGenres() {
+    console.log("Create genres starts");
+    await async.each(
+      genres,
+      function (genre, cb) {
+        var vals = [createUUID(), genre];
+        db.run(insertSql, vals, function (err) {
+          if (err) throw err;
+          cb();
+        });
+      },
+      function (err) {
+        if (err) console.error(err);
+
+        return;
+      }
+    );
+  }
+
+  createTables();
 }
 
 function createUUID() {
@@ -175,4 +179,5 @@ function createUUID() {
 setupDatabase()
   .then(requestHandlers())
   .catch((e) => console.error(e));
+
 module.exports = app;

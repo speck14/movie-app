@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./index.css";
 import MovieList from "./movieList";
 import AddMovie from "./addmovie";
-import Button from "./button";
 import MovieItem from "./movieItem";
-
 
 function App() {
   var [allMovieGenres, setAllMovieGenres] = useState([]);
@@ -74,9 +72,13 @@ function App() {
     //this is what renders initially on startup, when neither a single movie view nor "add movie" are selected (all movies list)
     return (
       <div>
-        <MovieList allMovies={movies} selectedMovie={selectedMovie} movieClick={handleMovieViewClick}/>
+        <MovieList
+          allMovies={movies}
+          selectedMovie={selectedMovie}
+          movieClick={handleMovieViewClick}
+        />
         <div className="addMovie">
-          <Button clickHandler={handleAddMovieClick} text="Add Movie" />
+          <button onClick={handleAddMovieClick}>Add Movie</button>
         </div>
       </div>
     );
@@ -85,7 +87,7 @@ function App() {
     return (
       <div>
         <AddMovie genres={allMovieGenres} />
-        <Button clickHandler={handleBackClick} text="Back to all movies" />
+        <button onClick={handleBackClick}>Back to all movies</button>
       </div>
     );
   } else {
@@ -99,7 +101,7 @@ function App() {
           allGenres={allMovieGenres}
           movieViewSetter={movieViewWrapper}
         />
-        <Button clickHandler={handleBackClick} text="Back to all movies" />
+        <button onClick={handleBackClick}>Back to all movies</button>
       </div>
     );
   }

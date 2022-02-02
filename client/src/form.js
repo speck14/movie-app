@@ -1,6 +1,5 @@
 import { React, useState } from "react";
 import Checkbox from "./checkbox";
-import Button from "./button";
 import "./index.css"
 
 function MovieForm({
@@ -59,9 +58,9 @@ function MovieForm({
           ))}
         </div>
         <div className="display-inline">
-        <Button clickHandler={submitHandler} text="Submit" />
+        <button onClick={submitHandler}>Submit</button>
         <div className="display-inline lft-pd">
-        <Button clickHandler={handleClearClick} text="Clear" />
+          <button onClick={handleClearClick}>Clear</button>
         </div>
         </div>
       </fieldset>

@@ -1,5 +1,4 @@
 import { React, useState } from "react";
-import Button from "./button";
 import EditMovie from "./editMovie";
 import "./index.css";
 
@@ -60,9 +59,9 @@ function MovieItem({
             </ul>
           </div>
           <div className="display-inline lft-pd">
-            <Button clickHandler={onEditCancelClick} text="Edit" />
+            <button onClick={onEditCancelClick}>Edit</button>
             <div className="display-inline lft-pd">
-              <Button clickHandler={onDeleteClick} text="Delete" />
+              <button onClick={onDeleteClick}>Delete</button>
             </div>
           </div>
         </div>

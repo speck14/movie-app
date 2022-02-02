@@ -1,6 +1,5 @@
 import { React, useState } from "react";
 import MovieForm from "./form";
-import Button from "./button";
 
 var UpdatedGenres = ({ name }) => <li>{name}</li>;
 
@@ -114,9 +113,9 @@ function EditMovie({
             currentGenres={currentGenres}
           />
           <div className="display-inline lft-pd">
-            <Button clickHandler={cancelClickHandler} text="Cancel" />
+            <button onClick={cancelClickHandler}>Cancel</button>
             <div className="display-inline lft-pd">
-              <Button clickHandler={deleteClickHandler} text="Delete" />
+              <button onClick={deleteClickHandler}>Delete</button>
             </div>
           </div>
         </div>
