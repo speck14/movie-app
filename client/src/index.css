@@ -1,0 +1,28 @@
+.buttonToLink{
+  background: none;
+  border: none;
+  color: blue;
+  display: block;
+}
+
+.buttonToLink:hover{
+  background: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.add-padding {
+  padding-bottom: 15px;
+}
+
+.genre-legend {
+  padding-bottom: 5px;
+}
+
+.display-inline {
+  display: inline;
+}
+
+.lft-pd {
+  padding-left: 10px;
+}

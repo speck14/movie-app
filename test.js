@@ -1,9 +1,9 @@
-var app = require('./server.js');
+var app = require('./server');
 var request = require('request');
 var expect = require('chai').expect;
 var _ = require('underscore');
 
-var url = 'http://localhost:3000';
+var url = 'http://localhost:5000';
 
 describe('server', function() {
 

@@ -8,18 +8,31 @@
     "url": "http://github.com/CSNW/movie-app"
   },
   "scripts": {
-    "test": "mocha test.js"
+    "preinstall": "npx npm-force-resolutions",
+    "postinstall": "cd client && npm install",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"nodemon --inspect=5858 server.js\" \"npm run client\"",
+    "test": "mocha test.js",
+    "debug-server": "node --inspect-brk=5858 server.js"
   },
   "dependencies": {
+    "async": "^3.2.2",
     "body-parser": "^1.18.3",
+    "concurrently": "^6.4.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
+    "nodemon": "^2.0.15",
     "sqlite3": "^4.0.6",
     "uuid": "1.4.1"
   },
   "devDependencies": {
-    "mocha": "5.1.0",
     "chai": "1.9.0",
+    "mocha": "^9.1.3",
+    "npm-force-resolutions": "0.0.10",
     "request": "^2.68.0",
-    "underscore": "1.6.0"
+    "underscore": "^1.13.1"
+  },
+  "resolutions": {
+    "json-schema": ">=0.4.0"
   }
 }
