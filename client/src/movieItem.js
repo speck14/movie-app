@@ -11,6 +11,7 @@ function MovieItem({
   currentGenres,
   allGenres,
   movieViewSetter,
+  movieUpdater
 }) {
   var [editMovieView, setEditMovieView] = useState(false);
 
@@ -46,6 +47,7 @@ function MovieItem({
             allGenres={allGenres}
             cancelClickHandler={onEditCancelClick}
             deleteClickHandler={onDeleteClick}
+            movieUpdater={movieUpdater}
           />
         </div>
       ) : (

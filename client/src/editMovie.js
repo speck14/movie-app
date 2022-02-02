@@ -10,6 +10,7 @@ function EditMovie({
   allGenres,
   cancelClickHandler,
   deleteClickHandler,
+  movieUpdater
 }) {
   var [checkedState, setCheckedState] = useState(initialCheck());
   var [updatedTitle, setUpdatedTitle] = useState(movieTitle);
@@ -51,7 +52,7 @@ function EditMovie({
     return initSelectedGenres;
   }
 
-  async function updateMovie() {
+/*   async function updateMovie() {
     await fetch(`http://localhost:5000/movies/${moviePK}`, {
       method: "PUT",
       headers: { "Content-type": "application/json" },
@@ -66,7 +67,7 @@ function EditMovie({
       }
       setSubmitted(true);
     });
-  }
+  } */
 
   async function checkedGenres() {
     var checkedGenreArr = [];
@@ -92,7 +93,8 @@ function EditMovie({
       setSubmitted(false);
     } else {
       await checkedGenres();
-      updateMovie();
+      await movieUpdater(moviePK, updatedTitle, selectedGenrePKs);
+      setSubmitted(true);
     }
   }
 

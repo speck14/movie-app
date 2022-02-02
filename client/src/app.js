@@ -17,8 +17,28 @@ function App() {
   var selectedMovie = useRef({});
   var selectedMovieGenres = useRef([]);
 
+    /*Wrapper functions can be passed to child components, allowing the child component to update state in
+    its parent
+  */
   function movieViewWrapper(data) {
     setViewMovie(data);
+  }
+
+  async function updateMovie(moviePK, updatedTitle, selectedGenrePKs) {
+    await fetch(`http://localhost:5000/movies/${moviePK}`, {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        name: updatedTitle,
+        genre_fks: selectedGenrePKs,
+        pk: moviePK,
+      }),
+    }).then((data, err) => {
+      if (!data.ok || err) {
+        throw Error;
+      }
+      return;
+    });
   }
 
   useEffect(() => {
@@ -100,6 +120,7 @@ function App() {
           currentGenres={selectedMovieGenres.current}
           allGenres={allMovieGenres}
           movieViewSetter={movieViewWrapper}
+          movieUpdater={updateMovie}
         />
         <button onClick={handleBackClick}>Back to all movies</button>
       </div>
