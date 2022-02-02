@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import Checkbox from "./checkbox";
-import "./index.css"
+import "./index.css";
 
 function MovieForm({
   className,
@@ -10,9 +10,9 @@ function MovieForm({
   checkedState,
   checkHandler,
   titleChangeHandler,
-  movieTitle = ""
+  movieTitle = "",
 }) {
-  var [initTitle] = useState([movieTitle])
+  var [initTitle] = useState([movieTitle]);
   /*When you update a state, the existing state is totally replaced with the new value.
   Checks the checkedState array for which value has been changed, creates a new array of
   true/false values based on the change, and updates checkedState with the new array
@@ -28,7 +28,7 @@ function MovieForm({
     e.preventDefault();
     submitStateHandler(false);
     checkHandler(checkedState.map((item) => false));
-    initTitle? titleChangeHandler(initTitle) : titleChangeHandler('');
+    initTitle ? titleChangeHandler(initTitle) : titleChangeHandler("");
   }
 
   return (
@@ -46,22 +46,25 @@ function MovieForm({
         </div>
         <div className="genre-checklist add-padding">
           <legend className="genre-legend">Select genres:</legend>
-          {allGenres.map((genre, index) => (
-            <Checkbox
-              key={genre.pk}
-              name={genre.name}
-              id={genre.pk}
-              index={index}
-              isChecked={checkedState[index]}
-              eventHandler={handleCheckChange}
-            />
-          ))}
+          {allGenres.map(function (genre, index) {
+            var changeHandler = () => handleCheckChange(index);
+            return (
+              <Checkbox
+                key={genre.pk}
+                name={genre.name}
+                id={genre.pk}
+                index={index}
+                isChecked={checkedState[index]}
+                eventHandler={changeHandler}
+              />
+            );
+          })}
         </div>
         <div className="display-inline">
-        <button onClick={submitHandler}>Submit</button>
-        <div className="display-inline lft-pd">
-          <button onClick={handleClearClick}>Clear</button>
-        </div>
+          <button onClick={submitHandler}>Submit</button>
+          <div className="display-inline lft-pd">
+            <button onClick={handleClearClick}>Clear</button>
+          </div>
         </div>
       </fieldset>
     </form>
