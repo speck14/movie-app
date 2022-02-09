@@ -46,11 +46,12 @@ function App() {
       setAllMovieGenres(data);
     }
 
-    getMovies()
-      .then(getAllGenres())
-      .catch((err) => {
-        if (err) throw err;
-      });
+    try {
+      getMovies();
+      getAllGenres();
+    } catch(err) {
+      throw err;
+    }
   }, [addMovieView, viewMovie]);
 
   //runs when movie is clicked
