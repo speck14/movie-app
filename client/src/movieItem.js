@@ -4,10 +4,10 @@ import "./index.css";
 
 function MovieItem({
   selectedMovie,
-  currentGenres,
-  allGenres,
-  movieViewSetter,
-  movieUpdater,
+  selectedMovieGenres,
+  allMovieGenres,
+  setViewMovie,
+  updateMovie,
   handleBackClick,
 }) {
   var [editMovieView, setEditMovieView] = useState(false);
@@ -28,7 +28,7 @@ function MovieItem({
         if (!data.ok || err) {
           throw Error;
         }
-        movieViewSetter(false);
+        setViewMovie(false);
       });
     }
   }
@@ -39,11 +39,11 @@ function MovieItem({
         <div className="add-padding">
           <EditMovie
             selectedMovie={selectedMovie}
-            currentGenres={currentGenres}
-            allGenres={allGenres}
+            selectedMovieGenres={selectedMovieGenres}
+            allMovieGenres={allMovieGenres}
             cancelClickHandler={onEditCancelClick}
             deleteClickHandler={onDeleteClick}
-            movieUpdater={movieUpdater}
+            updateMovie={updateMovie}
           />
         </div>
       ) : (
@@ -51,7 +51,7 @@ function MovieItem({
           <h2>{selectedMovie.name}</h2>
           <div className="genreList">
             <ul>
-              {currentGenres.map((genre) => (
+              {selectedMovieGenres.map((genre) => (
                 <li key={genre.pk}>{genre.name}</li>
               ))}
             </ul>

@@ -5,16 +5,16 @@ var UpdatedGenres = ({ name }) => <li>{name}</li>;
 
 function EditMovie({
   selectedMovie,
-  currentGenres,
-  allGenres,
+  selectedMovieGenres,
+  allMovieGenres,
   cancelClickHandler,
   deleteClickHandler,
-  movieUpdater,
+  updateMovie,
 }) {
   var [checkedState, setCheckedState] = useState(initialCheck());
   var [updatedTitle, setUpdatedTitle] = useState(selectedMovie.name);
   var [submitted, setSubmitted] = useState(false);
-  var [submittedGenreNames, setSubmittedGenreNames] = useState([currentGenres]);
+  var [submittedGenreNames, setSubmittedGenreNames] = useState([selectedMovieGenres]);
   var selectedGenrePKs = [];
   //var selectedGenreNames = [];
 
@@ -40,9 +40,9 @@ function EditMovie({
   the edit form.
   */
   function initialCheck() {
-    var initSelectedGenres = new Array(allGenres.length).fill(false);
-    currentGenres.forEach((movieGenre) => {
-      allGenres.forEach((genre, index) => {
+    var initSelectedGenres = new Array(allMovieGenres.length).fill(false);
+    selectedMovieGenres.forEach((movieGenre) => {
+      allMovieGenres.forEach((genre, index) => {
         if (genre.pk === movieGenre.pk) {
           initSelectedGenres[index] = true;
         }
@@ -72,7 +72,7 @@ function EditMovie({
     var checkedGenreArr = [];
     await checkedState.forEach((item, index) => {
       if (item) {
-        checkedGenreArr.push(allGenres[index]);
+        checkedGenreArr.push(allMovieGenres[index]);
       }
     });
     await checkedGenreArr.forEach((item) => {
@@ -92,7 +92,7 @@ function EditMovie({
       setSubmitted(false);
     } else {
       await checkedGenres();
-      await movieUpdater(selectedMovie.pk, updatedTitle, selectedGenrePKs);
+      await updateMovie(selectedMovie.pk, updatedTitle, selectedGenrePKs);
       setSubmitted(true);
     }
   }
@@ -106,12 +106,11 @@ function EditMovie({
             className="edit-form"
             submitStateHandler={submitStateWrapper}
             submitHandler={handleSubmit}
-            allGenres={allGenres}
+            allMovieGenres={allMovieGenres}
             checkedState={checkedState}
             checkHandler={checkedStateWrapper}
             titleChangeHandler={updatedTitleWrapper}
             movieTitle={updatedTitle}
-            currentGenres={currentGenres}
           />
           <div className="display-inline lft-pd">
             <button onClick={cancelClickHandler}>Cancel</button>

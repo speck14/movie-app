@@ -6,7 +6,7 @@ function MovieForm({
   className,
   submitStateHandler,
   submitHandler,
-  allGenres,
+  allMovieGenres,
   checkedState,
   checkHandler,
   titleChangeHandler,
@@ -46,7 +46,7 @@ function MovieForm({
         </div>
         <div className="genre-checklist add-padding">
           <legend className="genre-legend">Select genres:</legend>
-          {allGenres.map(function (genre, index) {
+          {allMovieGenres?.map(function (genre, index) {
             var changeHandler = () => handleCheckChange(index);
             return (
               <Checkbox

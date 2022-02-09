@@ -17,13 +17,6 @@ function App() {
   var [selectedMovie, setSelectedMovie] = useState({});
   var [selectedMovieGenres, setSelectedMovieGenres] = useState([]);
 
-  /*Wrapper functions can be passed to child components, allowing the child component to update state in
-    its parent
-  */
-  function movieViewWrapper(data) {
-    setViewMovie(data);
-  }
-
   async function updateMovie(moviePK, updatedTitle, selectedGenrePKs) {
     await fetch(`http://localhost:5000/movies/${moviePK}`, {
       method: "PUT",
@@ -89,15 +82,15 @@ function App() {
         />
       )}
       {addMovieView && (
-        <AddMovie genres={allMovieGenres} handleBackClick={handleBackClick} />
+        <AddMovie allMovieGenres={allMovieGenres} handleBackClick={handleBackClick} />
       )}
       {viewMovie && (
         <MovieItem
           selectedMovie={selectedMovie}
-          currentGenres={selectedMovieGenres}
-          allGenres={allMovieGenres}
-          movieViewSetter={movieViewWrapper}
-          movieUpdater={updateMovie}
+          selectedMovieGenres={selectedMovieGenres}
+          allMovieGenres={allMovieGenres}
+          setViewMovie={setViewMovie}
+          updateMovie={updateMovie}
           handleBackClick={handleBackClick}
         />
       )}

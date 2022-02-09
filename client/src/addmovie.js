@@ -5,14 +5,13 @@ import "./index.css";
 //once a movie is added, the newly added movie title is rendered & associated genres are listed
 var SubmittedGenres = ({ name }) => <li>{name}</li>;
 
-function AddMovie({ genres, handleBackClick }) {
-  console.log(handleBackClick);
+function AddMovie({ allMovieGenres, handleBackClick }) {
   var [checkedState, setCheckedState] = useState(
     /*Generates new array of "false" values, same length as array of all genres.
       When user selects a genre, the index of that is associated with the genre in the original "allGenres"
       array.
       */
-    new Array(genres.length).fill(false)
+    new Array(allMovieGenres.length).fill(false)
   );
   var [movieTitle, setMovieTitle] = useState("");
   var [selectedGenreNames, setSelectedGenreNames] = useState([]);
@@ -60,7 +59,7 @@ function AddMovie({ genres, handleBackClick }) {
     var checkedGenreArr = [];
     await checkedState.forEach((item, index) => {
       if (item) {
-        checkedGenreArr.push(genres[index]);
+        checkedGenreArr.push(allMovieGenres[index]);
       }
     });
     selectedGenres = await checkedGenreArr.map((item) => {
@@ -94,7 +93,7 @@ function AddMovie({ genres, handleBackClick }) {
               className="add-movie"
               submitStateHandler={submitStateWrapper}
               submitHandler={handleSubmit}
-              allGenres={genres}
+              allMovieGenres={allMovieGenres}
               checkedState={checkedState}
               checkHandler={checkedStateWrapper}
               titleChangeHandler={titleStateWrapper}
