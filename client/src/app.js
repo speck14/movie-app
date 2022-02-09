@@ -14,10 +14,10 @@ function App() {
     reference.current = newValue
   useRef persists between re-renderings, updates synchronously, and update doesn't trigger a re-rendering (unlike useState)
   */
-  var selectedMovie = useRef({});
-  var selectedMovieGenres = useRef([]);
+  var [selectedMovie, setSelectedMovie] = useState({});
+  var [selectedMovieGenres, setSelectedMovieGenres] = useState([]);
 
-    /*Wrapper functions can be passed to child components, allowing the child component to update state in
+  /*Wrapper functions can be passed to child components, allowing the child component to update state in
     its parent
   */
   function movieViewWrapper(data) {
@@ -67,65 +67,55 @@ function App() {
   }
 
   //runs when movie is clicked
-  function handleMovieViewClick() {
+  function handleMovieViewClick(movie) {
+    setSelectedMovie(movie);
     //compare selected movie's genre foreign keys to all genres for matches
-    async function getCurrentMovieGenres(allGenres) {
-      var movieGenres = await allGenres.filter((genre) => {
-        return selectedMovie.current.genre_fks.includes(genre.pk);
-      });
-      selectedMovieGenres.current = movieGenres;
-      setViewMovie(true);
-    }
-    getCurrentMovieGenres(allMovieGenres);
+    var movieGenres = allMovieGenres.filter((genre) =>
+      movie.genre_fks.includes(genre.pk)
+    );
+    setSelectedMovieGenres(movieGenres);
+    setViewMovie(true);
   }
 
   //from movie view, runs when back button is clicked (returns to list view)
-  function handleBackClick(e) {
-    e.preventDefault();
-    selectedMovie.current = {};
-    selectedMovieGenres.current = [];
+  function handleBackClick() {
+    setSelectedMovie({});
+    setSelectedMovieGenres([]);
     setViewMovie(false);
     setAddMovieView(false);
   }
-
-  if (!viewMovie && !addMovieView) {
-    //this is what renders initially on startup, when neither a single movie view nor "add movie" are selected (all movies list)
-    return (
-      <div>
-        <MovieList
-          allMovies={movies}
-          selectedMovie={selectedMovie}
-          movieClick={handleMovieViewClick}
-        />
-        <div className="addMovie">
-          <button onClick={handleAddMovieClick}>Add Movie</button>
-        </div>
-      </div>
-    );
-  } else if (!viewMovie && addMovieView) {
-    //renders when addMovieView is selected
-    return (
-      <div>
-        <AddMovie genres={allMovieGenres} />
-        <button onClick={handleBackClick}>Back to all movies</button>
-      </div>
-    );
-  } else {
-    //when individual movie view has been selected
-    return (
-      <div>
+  //this is what renders initially on startup, when neither a single movie view nor "add movie" are selected (all movies list)
+  return (
+    <div>
+      {!viewMovie && !addMovieView && (
+        <>
+          <MovieList
+            allMovies={movies}
+            selectedMovie={selectedMovie}
+            setSelectedMovie={setSelectedMovie}
+            handleMovieViewClick={handleMovieViewClick}
+          />
+          <div className="addMovie">
+            <button onClick={handleAddMovieClick}>Add Movie</button>
+          </div>
+        </>
+      )}
+      {addMovieView && (
+        <AddMovie genres={allMovieGenres} handleBackClick={handleBackClick} />
+      )}
+      {viewMovie && (
         <MovieItem
-          selectedMovieTitle={selectedMovie.current.name}
-          selectedMoviePK={selectedMovie.current.pk}
-          currentGenres={selectedMovieGenres.current}
+          selectedMovieTitle={selectedMovie.name}
+          selectedMoviePK={selectedMovie.pk}
+          currentGenres={selectedMovieGenres}
           allGenres={allMovieGenres}
           movieViewSetter={movieViewWrapper}
           movieUpdater={updateMovie}
+          handleBackClick={handleBackClick}
         />
-        <button onClick={handleBackClick}>Back to all movies</button>
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
 
 export default App;

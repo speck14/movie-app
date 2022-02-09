@@ -14,7 +14,12 @@ var Movie = ({ clickHandler, name }) => (
   </li>
 );
 
-function MovieList({ allMovies, selectedMovie, movieClick }) {
+function MovieList({
+  allMovies,
+  selectedMovie,
+  setSelectedMovie,
+  handleMovieViewClick,
+}) {
   return (
     <div className="ListMovies">
       <h1>Movies:</h1>
@@ -23,11 +28,7 @@ function MovieList({ allMovies, selectedMovie, movieClick }) {
           {allMovies.map((movie) => (
             <Movie
               key={movie.pk}
-              clickHandler={function (e) {
-                e.preventDefault();
-                selectedMovie.current = movie;
-                movieClick();
-              }}
+              clickHandler={() => handleMovieViewClick(movie)}
               name={movie.name}
             />
           ))}

@@ -5,7 +5,8 @@ import "./index.css";
 //once a movie is added, the newly added movie title is rendered & associated genres are listed
 var SubmittedGenres = ({ name }) => <li>{name}</li>;
 
-function AddMovie({ genres }) {
+function AddMovie({ genres, handleBackClick }) {
+  console.log(handleBackClick);
   var [checkedState, setCheckedState] = useState(
     /*Generates new array of "false" values, same length as array of all genres.
       When user selects a genre, the index of that is associated with the genre in the original "allGenres"
@@ -113,6 +114,7 @@ function AddMovie({ genres }) {
           </ul>
         </div>
       )}
+          <button onClick={handleBackClick}>Back to all movies</button>
     </div>
   );
 }

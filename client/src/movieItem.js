@@ -11,7 +11,8 @@ function MovieItem({
   currentGenres,
   allGenres,
   movieViewSetter,
-  movieUpdater
+  movieUpdater,
+  handleBackClick
 }) {
   var [editMovieView, setEditMovieView] = useState(false);
 
@@ -68,6 +69,7 @@ function MovieItem({
           </div>
         </div>
       )}
+      <button onClick={handleBackClick}>Back to all movies</button>
     </div>
   );
 }
