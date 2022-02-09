@@ -6,13 +6,6 @@ import React from "react";
               
   I used button's ability to perform an action, with CSS styling to make the button look like a link instead.
 */
-var Movie = ({ clickHandler, name }) => (
-  <li>
-    <button onClick={clickHandler} className="buttonToLink">
-      {name}
-    </button>
-  </li>
-);
 
 function MovieList({ allMovies, handleMovieViewClick, setAddMovieView }) {
   return (
@@ -21,11 +14,14 @@ function MovieList({ allMovies, handleMovieViewClick, setAddMovieView }) {
       <div className="MovieList">
         <ul>
           {allMovies.map((movie) => (
-            <Movie
-              key={movie.pk}
-              clickHandler={() => handleMovieViewClick(movie)}
-              name={movie.name}
-            />
+            <li key={movie.pk}>
+              <button
+                onClick={() => handleMovieViewClick(movie)}
+                className="buttonToLink"
+              >
+                {movie.name}
+              </button>
+            </li>
           ))}
         </ul>
       </div>
