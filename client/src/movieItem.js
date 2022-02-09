@@ -2,9 +2,6 @@ import { React, useState } from "react";
 import EditMovie from "./editMovie";
 import "./index.css";
 
-//Genres associated with the current movie are listed
-var MovieGenres = ({ genreName }) => <li>{genreName}</li>;
-
 function MovieItem({
   selectedMovieTitle,
   selectedMoviePK,
@@ -57,7 +54,7 @@ function MovieItem({
           <div className="genreList">
             <ul>
               {currentGenres.map((genre) => (
-                <MovieGenres key={genre.pk} genreName={genre.name} />
+                <li key={genre.pk}>{genre.name}</li>
               ))}
             </ul>
           </div>
