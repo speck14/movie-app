@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import MovieList from "./movieList";
 import AddMovie from "./addmovie";
@@ -60,12 +60,6 @@ function App() {
       });
   }, [addMovieView, viewMovie]);
 
-  //runs when add movie button is clicked
-  function handleAddMovieClick(e) {
-    e.preventDefault();
-    setAddMovieView(true);
-  }
-
   //runs when movie is clicked
   function handleMovieViewClick(movie) {
     setSelectedMovie(movie);
@@ -88,17 +82,11 @@ function App() {
   return (
     <div>
       {!viewMovie && !addMovieView && (
-        <>
-          <MovieList
-            allMovies={movies}
-            selectedMovie={selectedMovie}
-            setSelectedMovie={setSelectedMovie}
-            handleMovieViewClick={handleMovieViewClick}
-          />
-          <div className="addMovie">
-            <button onClick={handleAddMovieClick}>Add Movie</button>
-          </div>
-        </>
+        <MovieList
+          allMovies={movies}
+          handleMovieViewClick={handleMovieViewClick}
+          setAddMovieView={setAddMovieView}
+        />
       )}
       {addMovieView && (
         <AddMovie genres={allMovieGenres} handleBackClick={handleBackClick} />

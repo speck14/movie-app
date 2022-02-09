@@ -16,9 +16,8 @@ var Movie = ({ clickHandler, name }) => (
 
 function MovieList({
   allMovies,
-  selectedMovie,
-  setSelectedMovie,
   handleMovieViewClick,
+  setAddMovieView
 }) {
   return (
     <div className="ListMovies">
@@ -34,6 +33,9 @@ function MovieList({
           ))}
         </ul>
       </div>
+      <div className="addMovie">
+            <button onClick={() => setAddMovieView(true)}>Add Movie</button>
+        </div>
     </div>
   );
 }
