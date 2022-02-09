@@ -14,11 +14,7 @@ var Movie = ({ clickHandler, name }) => (
   </li>
 );
 
-function MovieList({
-  allMovies,
-  handleMovieViewClick,
-  setAddMovieView
-}) {
+function MovieList({ allMovies, handleMovieViewClick, setAddMovieView }) {
   return (
     <div className="ListMovies">
       <h1>Movies:</h1>
@@ -34,8 +30,8 @@ function MovieList({
         </ul>
       </div>
       <div className="addMovie">
-            <button onClick={() => setAddMovieView(true)}>Add Movie</button>
-        </div>
+        <button onClick={() => setAddMovieView(true)}>Add Movie</button>
+      </div>
     </div>
   );
 }
