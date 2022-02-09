@@ -4,16 +4,15 @@ import MovieForm from "./form";
 var UpdatedGenres = ({ name }) => <li>{name}</li>;
 
 function EditMovie({
-  movieTitle,
-  moviePK,
+  selectedMovie,
   currentGenres,
   allGenres,
   cancelClickHandler,
   deleteClickHandler,
-  movieUpdater
+  movieUpdater,
 }) {
   var [checkedState, setCheckedState] = useState(initialCheck());
-  var [updatedTitle, setUpdatedTitle] = useState(movieTitle);
+  var [updatedTitle, setUpdatedTitle] = useState(selectedMovie.name);
   var [submitted, setSubmitted] = useState(false);
   var [submittedGenreNames, setSubmittedGenreNames] = useState([currentGenres]);
   var selectedGenrePKs = [];
@@ -52,7 +51,7 @@ function EditMovie({
     return initSelectedGenres;
   }
 
-/*   async function updateMovie() {
+  /*   async function updateMovie() {
     await fetch(`http://localhost:5000/movies/${moviePK}`, {
       method: "PUT",
       headers: { "Content-type": "application/json" },
@@ -93,7 +92,7 @@ function EditMovie({
       setSubmitted(false);
     } else {
       await checkedGenres();
-      await movieUpdater(moviePK, updatedTitle, selectedGenrePKs);
+      await movieUpdater(selectedMovie.pk, updatedTitle, selectedGenrePKs);
       setSubmitted(true);
     }
   }
@@ -102,7 +101,7 @@ function EditMovie({
     <div>
       {!submitted ? (
         <div>
-          <h2>Edit {movieTitle}</h2>
+          <h2>Edit {selectedMovie.name}</h2>
           <MovieForm
             className="edit-form"
             submitStateHandler={submitStateWrapper}
@@ -123,7 +122,7 @@ function EditMovie({
         </div>
       ) : (
         <div>
-          <h1>Updated {movieTitle}!</h1>
+          <h1>Updated {selectedMovie.name}!</h1>
           <h2>Updated Title: {updatedTitle}</h2>
           <h2>Genres:</h2>
           <ul>

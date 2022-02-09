@@ -93,8 +93,7 @@ function App() {
       )}
       {viewMovie && (
         <MovieItem
-          selectedMovieTitle={selectedMovie.name}
-          selectedMoviePK={selectedMovie.pk}
+          selectedMovie={selectedMovie}
           currentGenres={selectedMovieGenres}
           allGenres={allMovieGenres}
           movieViewSetter={movieViewWrapper}
