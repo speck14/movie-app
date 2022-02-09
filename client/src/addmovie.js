@@ -18,21 +18,6 @@ function AddMovie({ allMovieGenres, handleBackClick }) {
   var [submitted, setSubmitted] = useState(false);
   var selectedGenres = [];
 
-  /*Wrapper functions can be passed to child components, allowing the child component to update state in
-    its parent
-  */
-  var checkedStateWrapper = function (data) {
-    setCheckedState(data);
-  };
-
-  var titleStateWrapper = function (data) {
-    setMovieTitle(data);
-  };
-
-  var submitStateWrapper = function (data) {
-    setSubmitted(data);
-  };
-
   async function submitMovie() {
     await fetch("http://localhost:5000/movies", {
       method: "POST",
@@ -91,12 +76,12 @@ function AddMovie({ allMovieGenres, handleBackClick }) {
           <div className="add-padding">
             <MovieForm
               className="add-movie"
-              submitStateHandler={submitStateWrapper}
+              setSubmitted={setSubmitted}
               submitHandler={handleSubmit}
               allMovieGenres={allMovieGenres}
               checkedState={checkedState}
-              checkHandler={checkedStateWrapper}
-              titleChangeHandler={titleStateWrapper}
+              setCheckedState={setCheckedState}
+              titleChangeHandler={setMovieTitle}
               movieTitle={movieTitle}
             />
           </div>

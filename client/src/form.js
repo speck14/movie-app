@@ -4,11 +4,11 @@ import "./index.css";
 
 function MovieForm({
   className,
-  submitStateHandler,
+  setSubmitted,
   submitHandler,
   allMovieGenres,
   checkedState,
-  checkHandler,
+  setCheckedState,
   titleChangeHandler,
   movieTitle = "",
 }) {
@@ -21,14 +21,14 @@ function MovieForm({
     var updatedCheckState = checkedState.map((item, index) =>
       index === checkedIndex ? !item : item
     );
-    checkHandler(updatedCheckState);
+    setCheckedState(updatedCheckState);
   };
 
   function handleClearClick(e) {
     e.preventDefault();
-    submitStateHandler(false);
-    checkHandler(checkedState.map((item) => false));
-    initTitle ? titleChangeHandler(initTitle) : titleChangeHandler("");
+    setSubmitted(false);
+    setCheckedState(checkedState.map((item) => false));
+    titleChangeHandler(initTitle ? initTitle : "");
   }
 
   return (

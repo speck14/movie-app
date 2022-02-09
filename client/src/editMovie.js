@@ -16,20 +16,6 @@ function EditMovie({
   var [submitted, setSubmitted] = useState(false);
   var [submittedGenreNames, setSubmittedGenreNames] = useState([selectedMovieGenres]);
   var selectedGenrePKs = [];
-  //var selectedGenreNames = [];
-
-  /*Wrapper functions can be passed to child components, allowing the child component to update state in
-    its parent
-  */
-  var checkedStateWrapper = function (data) {
-    setCheckedState(data);
-  };
-  var submitStateWrapper = function (data) {
-    setSubmitted(data);
-  };
-  var updatedTitleWrapper = function (data) {
-    setUpdatedTitle(data);
-  };
 
   /*Creates new array (initSelectedGenres) with "true" values for movie's current genres on initial rendering.
   CurrentGenre's genre locations are checked with allGenres, to ensure that the genre's index in allGenres is
@@ -104,12 +90,12 @@ function EditMovie({
           <h2>Edit {selectedMovie.name}</h2>
           <MovieForm
             className="edit-form"
-            submitStateHandler={submitStateWrapper}
+            setSubmitted={setSubmitted}
             submitHandler={handleSubmit}
             allMovieGenres={allMovieGenres}
             checkedState={checkedState}
-            checkHandler={checkedStateWrapper}
-            titleChangeHandler={updatedTitleWrapper}
+            setCheckedState={setCheckedState}
+            titleChangeHandler={setUpdatedTitle}
             movieTitle={updatedTitle}
           />
           <div className="display-inline lft-pd">
