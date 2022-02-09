@@ -11,7 +11,7 @@ function Checkbox({ name, id, index, isChecked, eventHandler }) {
           name={name}
           value={id}
           checked={isChecked}
-          onChange={() => eventHandler(index)}
+          onChange={eventHandler}
         />
         {name}
       </label>

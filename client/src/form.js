@@ -47,15 +47,13 @@ function MovieForm({
         <div className="genre-checklist add-padding">
           <legend className="genre-legend">Select genres:</legend>
           {allMovieGenres?.map(function (genre, index) {
-            var changeHandler = () => handleCheckChange(index);
             return (
               <Checkbox
                 key={genre.pk}
                 name={genre.name}
                 id={genre.pk}
-                index={index}
                 isChecked={checkedState[index]}
-                eventHandler={changeHandler}
+                eventHandler={() => handleCheckChange(index)}
               />
             );
           })}
